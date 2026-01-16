@@ -1,0 +1,9 @@
+{
+    "central_log": {
+        "format": "json",
+        "strategy": "auto_detect_or_interactive"
+    },
+    "resolved": {
+        "documentation": "This section is auto-populated by log_manager.py when a log home is selected interactively."
+    }
+}
