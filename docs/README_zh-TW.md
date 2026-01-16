@@ -1,0 +1,154 @@
+# keeponfirst-local-brain
+
+🧠 一個以本地優先的大腦擷取系統，配合 AI 輔助。
+
+> **記錄發生在思考的當下，而非事後。**
+
+[![English](https://img.shields.io/badge/Docs-English-blue)](../README.md)
+
+## 為什麼做這個專案？
+
+試用了 Notion AI 兩天後，我發現它只提供 **20 次免費使用** — 不是每日或每月額度，就是總共 20 次用完就沒了。
+
+這時我想到：我每天都在用 AI-IDE（像是 Antigravity/Cursor），為什麼不做一個 **Local Brain**：
+
+1. **在想法發生的當下擷取** — 就在我已經在用的 IDE 裡
+2. **用 AI 來結構化和整理** — 利用我已經在付費的 AI
+3. **透過 API 同步到 Notion** — 兩邊的好處都拿到
+4. **保持 Local-first** — 不被任何單一服務綁死
+
+這樣一來，如果 Notion 有變動或我想換後端，我的資料還是我的。
+
+---
+
+## 設計理念
+
+- **記錄發生在思考當下** — 不是事後，那時上下文早就消失了
+- **AI 只輔助整理，不擅自寫入** — 永遠保持 Human-in-the-loop
+- **Local-first** — 資料在你的機器上
+- **Preview & Confirm** — 每次寫入都需要明確確認
+
+---
+
+## 快速開始
+
+### 1. Clone & 設定
+
+```bash
+git clone https://github.com/keeponfirst/keeponfirst-local-brain.git
+cd keeponfirst-local-brain
+
+# 建立 Python 虛擬環境
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r scripts/requirements.txt
+
+# 設定環境變數
+cp .env.example .env
+```
+
+### 2. 設定後端 (Notion)
+
+1. 前往 [Notion Integrations](https://www.notion.so/my-integrations)
+2. 建立新的 integration，複製 token
+3. 在 Notion 建立一個頁面，與你的 integration 分享
+
+編輯 `.env`：
+```env
+NOTION_TOKEN=secret_xxxxx
+NOTION_PARENT=your-page-id-here
+NOTION_MODE=page
+```
+
+### 3. 驗證設定
+
+```bash
+source .venv/bin/activate
+python scripts/write_record.py --dry-run --input tests/example_idea.json
+```
+
+---
+
+## 安裝為全域 Skill
+
+安裝一次，在**任何 workspace** 使用：
+
+```bash
+cp -r skills/keeponfirst-local-brain-skill ~/.gemini/antigravity/skills/
+```
+
+### 在新專案初始化
+
+```bash
+~/.gemini/antigravity/skills/keeponfirst-local-brain-skill/scripts/init.sh
+```
+
+### 觸發指令
+
+| 觸發 | 動作 |
+|------|------|
+| `/kof-cap` | 自動分類擷取 |
+| `/kof-decision` | 強制決策記錄 |
+| `/kof-idea` | 強制想法記錄 |
+| `/kof-backlog` | 強制待辦記錄 |
+| `/kof-worklog` | 強制工作日誌 |
+| `/kof-note` | 原始擷取 |
+
+**範例：**
+```
+/kof-cap 今天決定用 Supabase 因為 pricing 更透明
+/kof-idea 想到一個新的 feature：語音輸入擷取
+/kof-worklog 完成了 API 整合
+```
+
+---
+
+## 記錄類型
+
+| 類型 | Emoji | 用途 |
+|------|-------|------|
+| **Decision** | ⚖️ | 選擇、權衡 |
+| **Worklog** | 📝 | 每日活動 |
+| **Idea** | 💡 | 靈感 |
+| **Backlog** | 📋 | 未來任務 |
+| **Note** | 📄 | 原始擷取 |
+
+---
+
+## 專案結構
+
+```
+.
+├── skills/
+│   └── keeponfirst-local-brain-skill/
+│       ├── SKILL.md
+│       └── scripts/
+├── scripts/
+│   ├── config.py
+│   ├── notion_api.py
+│   ├── write_record.py
+│   └── init_brain.py
+├── records/
+│   ├── decisions/
+│   ├── worklogs/
+│   ├── ideas/
+│   └── backlogs/
+├── .env.example
+└── README.md
+```
+
+---
+
+## 本地儲存
+
+每筆記錄會儲存到本地：
+- `{timestamp}_{type}_{slug}.md` — 人類可讀
+- `{timestamp}_{type}_{slug}.json` — 機器可讀
+
+**你的資料留在你的機器上。**
+
+---
+
+## 授權
+
+MIT

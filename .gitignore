@@ -1,0 +1,26 @@
+# Environment
+.env
+.local_state.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local records - keep directories, ignore files
+records/**/*
+!records/**/.gitkeep
+!records/**/

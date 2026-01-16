@@ -1,0 +1,11 @@
+{
+    "type": "idea",
+    "title": "Example Idea Record",
+    "body": "## Description\nThis is an example idea to test the capture workflow.\n\n## Inspiration\nTesting the Keeponfirst Local Brain starter.\n\n## Potential\nHelps verify the setup is working correctly.\n\n## Maturity\n**raw**",
+    "source_text": "Example idea for testing",
+    "date": null,
+    "tags": [
+        "example",
+        "test"
+    ]
+}

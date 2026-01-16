@@ -1,0 +1,222 @@
+---
+name: keeponfirst-local-brain-skill
+description: Local-first brain capture system. Triggers: /kof-cap, /kof-decision, /kof-idea, /kof-backlog, /kof-worklog, /kof-note
+---
+
+# Keeponfirst Local Brain Skill
+
+A local-first brain capture system with AI assistance.
+
+## Triggers
+
+| Trigger | Action |
+|---------|--------|
+| `/kof-cap` | Capture with auto-classification |
+| `/kof-decision` | Force decision record |
+| `/kof-idea` | Force idea record |
+| `/kof-backlog` | Force backlog record |
+| `/kof-worklog` | Force worklog record |
+| `/kof-note` | Raw capture (fallback) |
+
+---
+
+## Installation
+
+```bash
+git clone https://github.com/keeponfirst/keeponfirst-local-brain.git
+cp -r keeponfirst-local-brain/skills/keeponfirst-local-brain-skill ~/.gemini/antigravity/skills/
+```
+
+---
+
+## First-Time Setup (Per Project)
+
+```bash
+~/.gemini/antigravity/skills/keeponfirst-local-brain-skill/scripts/init.sh
+```
+
+This creates:
+- `.env` from template
+- `records/` directory structure
+- Python virtual environment
+
+Configure `.env`:
+```env
+NOTION_TOKEN=secret_xxxxx
+NOTION_PARENT=your-page-id-here
+NOTION_MODE=page
+```
+
+---
+
+## Record Types
+
+| Type | Emoji | Use For |
+|------|-------|---------|
+| **Decision** | ⚖️ | Choices, trade-offs, rationale |
+| **Worklog** | 📝 | Daily activities, learnings |
+| **Idea** | 💡 | Inspirations, possibilities |
+| **Backlog** | 📋 | Future tasks, TODOs |
+| **Note** | 📄 | Raw capture, unclassified |
+
+---
+
+## Capture Workflow
+
+### Step 1: Capture
+User provides natural language input with trigger.
+
+### Step 2: Interpret
+- `/kof-cap` → AI determines type automatically
+- `/kof-decision|idea|backlog|worklog` → Force specific type
+- `/kof-note` → Raw capture without structure
+
+### Step 3: Draft
+Generate structured content with appropriate template.
+
+### Step 4: Preview & Confirm ⚠️ CRITICAL
+
+**ALWAYS show preview before writing:**
+
+```
+我判斷這是一筆【TYPE】記錄，整理如下：
+
+---
+**TITLE**
+
+BODY
+---
+
+Tags: TAGS
+Date: DATE
+
+請選擇：
+✅ 確認寫入
+✏️ 修改
+❌ 取消
+```
+
+**DO NOT WRITE WITHOUT USER CONFIRMATION.**
+
+### Step 5: Execute
+
+Only after user confirms:
+
+1. Write draft JSON to temp file `/tmp/kof_record.json`
+2. Run the script:
+
+```bash
+cd $PROJECT_ROOT
+.venv/bin/python scripts/write_record.py --input /tmp/kof_record.json
+```
+
+> [!NOTE]
+> Using `--input` with a temp file is more reliable than `--stdin` which may have buffering issues in some shell environments.
+
+Draft JSON format:
+```json
+{
+  "type": "decision|worklog|idea|backlog|note",
+  "title": "Concise title",
+  "body": "Structured markdown content",
+  "source_text": "Original user input",
+  "date": "YYYY-MM-DD",
+  "tags": ["tag1", "tag2"]
+}
+```
+
+### Step 6: Report
+
+```
+✅ 記錄完成！
+
+📝 Remote: {url}
+💾 本地: {local_path}
+
+Type: {TYPE}
+Title: {TITLE}
+```
+
+---
+
+## Templates
+
+### Decision ⚖️
+```markdown
+## Context
+<why this decision was needed>
+
+## Options Considered
+- Option A: ...
+- Option B: ...
+
+## Chosen
+<what was chosen>
+
+## Rationale
+<why this choice>
+
+## Trade-offs
+<what was sacrificed>
+```
+
+### Worklog 📝
+```markdown
+## Activities
+- <what was done>
+
+## Learnings
+<insights gained>
+
+## Blockers
+<obstacles encountered>
+
+## Next Steps
+<what to do next>
+```
+
+### Idea 💡
+```markdown
+## Description
+<the idea>
+
+## Inspiration
+<where it came from>
+
+## Potential
+<what it could become>
+
+## Maturity
+<raw | developing | ready>
+```
+
+### Backlog 📋
+```markdown
+## Description
+<what needs to be done>
+
+## Priority
+<high | medium | low>
+
+## Effort
+<small | medium | large>
+
+## Dependencies
+- <prerequisite items>
+```
+
+### Note 📄
+```markdown
+<raw content as provided>
+```
+
+---
+
+## Scripts
+
+| Script | Purpose |
+|--------|---------|
+| `scripts/init.sh` | Initialize project |
+| `scripts/write_record.py` | Write record |
+| `scripts/notion_api.py` | Notion client |
+| `scripts/config.py` | Configuration |
