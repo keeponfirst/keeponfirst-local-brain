@@ -92,12 +92,6 @@ def resolve_log_home() -> Path:
             break
         search_path = search_path.parent
         
-    # Also check typical project structure if running from inside the repo
-    # e.g. if we are in scripts/, look at repo root
-    repo_guess = SCRIPT_DIR.parent.parent
-    if (repo_guess / MARKER_FILENAME).exists():
-        return repo_guess
-
     # 4. Interactive Ask (if TTY)
     if sys.stdin.isatty():
         print("\n\033[33m⚠️  Central Log Home not configured.\033[0m")
