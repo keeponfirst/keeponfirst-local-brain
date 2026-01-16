@@ -60,11 +60,17 @@ NOTION_PARENT=your-page-id-here
 NOTION_MODE=page
 ```
 
-### Central Log Setup
+### Centralized Storage & Logs
 
-The system tracks execution logs in `.agentic/logs/`.
-- **Auto-detection**: Enabled by `.agentic/CENTRAL_LOG_MARKER` in this repo.
-- **Global Use**: If you use the skill outside this repo, it will ask you once to confirm the log location.
+This system uses a **Central Home** for all your records and logs, regardless of where you capture them from.
+
+- **Storage Location**: Records are saved to `records/` inside your Central Home.
+- **Log Location**: Execution logs are saved to `.agentic/logs/` inside your Central Home.
+- **Configuration**:
+  - **Inside this repo**: Automatically detected via `.agentic/CENTRAL_LOG_MARKER`.
+  - **Outside this repo**: You will be asked to specify the Central Home location once (stored in `config.json`).
+
+This allows you to use `/kof-cap` in any project directory, and notes will be consolidated back here.
 
 ---
 

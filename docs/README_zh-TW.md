@@ -60,6 +60,20 @@ NOTION_PARENT=your-page-id-here
 NOTION_MODE=page
 ```
 
+### 中央存儲與日誌 (Centralized Storage & Logs)
+
+本系統使用 **Central Home** 來統一管理所有筆記與執行日誌，無論你在哪裡觸發錄入。
+
+- **筆記位置**：存於 Central Home 的 `records/` 目錄。
+- **日誌位置**：存於 Central Home 的 `.agentic/logs/` 目錄。
+- **設定方式**：
+  - **在本 Repo 內**：透過 `.agentic/CENTRAL_LOG_MARKER` 自動偵測。
+  - **在其他目錄**：首次執行時會詢問 Central Home 位置（設定存於 `config.json`）。
+
+此功能讓你可以在任何專案目錄使用 `/kof-cap`，筆記都會統一歸檔回到這裡。
+
+---
+
 ### 3. 驗證設定
 
 ```bash
