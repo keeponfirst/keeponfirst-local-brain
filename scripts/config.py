@@ -10,6 +10,7 @@ from pathlib import Path
 from dataclasses import dataclass
 from typing import Literal, Optional
 from dotenv import load_dotenv
+import log_manager
 
 # Find project root and load .env
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -66,13 +67,20 @@ class Config:
                 parent = state["root_page_id"]
                 auto_init = True
         
+        # Use Central Log Home as the Brain Root
+        try:
+            brain_root = log_manager.resolve_log_home()
+        except Exception:
+            # Fallback to local project root if resolution fails
+            brain_root = PROJECT_ROOT
+
         return cls(
             notion_token=token,
             notion_parent=parent if parent else None,
             notion_mode=mode,
             auto_init=auto_init,
-            records_dir=PROJECT_ROOT / "records",
-            assets_dir=PROJECT_ROOT / "assets",
+            records_dir=brain_root / "records",
+            assets_dir=brain_root / "assets",
         )
     
     def ensure_dirs(self) -> None:
