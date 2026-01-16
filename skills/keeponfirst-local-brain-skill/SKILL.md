@@ -116,15 +116,22 @@ Date: DATE
 Only after user confirms:
 
 1. Write draft JSON to temp file `/tmp/kof_record.json`
-2. Run the script:
+### Step 5: Execute
+
+Only after user confirms:
+
+1. Write draft JSON to temp file `/tmp/kof_record.json`
+2. Run the script from the global skill directory:
 
 ```bash
-cd $PROJECT_ROOT
-.venv/bin/python scripts/write_record.py --input /tmp/kof_record.json
+SKILL_ROOT="$HOME/.gemini/antigravity/skills/keeponfirst-local-brain-skill"
+# Execute using the skill's own virtual environment
+$SKILL_ROOT/.venv/bin/python $SKILL_ROOT/scripts/write_record.py --input /tmp/kof_record.json
 ```
 
 > [!NOTE]
-> Using `--input` with a temp file is more reliable than `--stdin` which may have buffering issues in some shell environments.
+> Using `--input` with a temp file is more reliable than `--stdin`.
+> Using absolute paths ensures the skill works from any directory.
 
 Draft JSON format:
 ```json
