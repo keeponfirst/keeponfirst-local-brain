@@ -49,6 +49,19 @@ NOTION_MODE=page
 
 ---
 
+## Central Log Configuration
+This skill uses a Central Log to track execution history across different workspaces.
+
+**Resolution Priority:**
+1. `ANTIGRAVITY_LOG_HOME` environment variable
+2. `config.json` in skill directory (set via interactive prompt)
+3. Auto-detection (looks for `.agentic/CENTRAL_LOG_MARKER` in parent directories)
+4. Interactive Prompt (asks you to specify location on first run)
+
+**Default Location:** `keeponfirst-local-brain/.agentic/logs/`
+
+---
+
 ## Record Types
 
 | Type | Emoji | Use For |

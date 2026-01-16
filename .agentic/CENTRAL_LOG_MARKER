@@ -1,0 +1,3 @@
+# Central Log Configuration
+# This file is used to designate a directory as the "Central Log Home" for Keeponfirst Local Brain.
+# If this file exists, the containing directory is considered a valid log home.

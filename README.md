@@ -60,7 +60,15 @@ NOTION_PARENT=your-page-id-here
 NOTION_MODE=page
 ```
 
-### 3. Verify Setup
+### Central Log Setup
+
+The system tracks execution logs in `.agentic/logs/`.
+- **Auto-detection**: Enabled by `.agentic/CENTRAL_LOG_MARKER` in this repo.
+- **Global Use**: If you use the skill outside this repo, it will ask you once to confirm the log location.
+
+---
+
+## Record Typesrify Setup
 
 ```bash
 source .venv/bin/activate

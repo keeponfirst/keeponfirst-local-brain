@@ -24,3 +24,7 @@ Thumbs.db
 records/**/*
 !records/**/.gitkeep
 !records/**/
+
+# Central Logs
+.agentic/logs/*
+!.agentic/logs/.gitkeep

@@ -19,6 +19,7 @@ from dataclasses import dataclass, asdict
 
 from config import get_config, PROJECT_ROOT
 from notion_api import NotionClient, RecordData, NotionPage
+import log_manager
 
 
 @dataclass
@@ -232,6 +233,18 @@ def main():
     # Execute
     try:
         result = write_record(input_data, dry_run=args.dry_run)
+        # Central Log
+        log_manager.write_central_log(
+            task_intent=f"capture_{result['record']['type']}",
+            event_data={
+                "record_type": result['record']['type'],
+                "title": result['record']['title'],
+                "notion_url": result['notion_url'],
+                "local_path": result['local_md'],
+                "tags": result['record']['tags']
+            },
+            status="SUCCESS"
+        )
         print(json.dumps(result, ensure_ascii=False, indent=2))
     except Exception as e:
         print(json.dumps({
