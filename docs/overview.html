@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keeponfirst Local Brain - Overview</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-purple: #a371f7;
+            --accent-orange: #d29922;
+            --border-color: #30363d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        .section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            color: var(--accent-blue);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section h2::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 24px;
+            background: var(--accent-blue);
+            border-radius: 2px;
+        }
+
+        .mermaid {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-blue);
+        }
+
+        .feature-card h3 {
+            color: var(--accent-green);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-blue {
+            background: rgba(88, 166, 255, 0.2);
+            color: var(--accent-blue);
+        }
+
+        .badge-green {
+            background: rgba(63, 185, 80, 0.2);
+            color: var(--accent-green);
+        }
+
+        .badge-purple {
+            background: rgba(163, 113, 247, 0.2);
+            color: var(--accent-purple);
+        }
+
+        .badge-orange {
+            background: rgba(210, 153, 34, 0.2);
+            color: var(--accent-orange);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.1), rgba(163, 113, 247, 0.1));
+            border: 1px solid var(--accent-blue);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .highlight-box h3 {
+            color: var(--accent-purple);
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+        }
+
+        footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>🧠 Keeponfirst Local Brain</h1>
+            <p class="subtitle">Local-first Brain Capture System with AI Assistance</p>
+            <div style="margin-top: 1rem;">
+                <span class="badge badge-blue">v1.0</span>
+                <span class="badge badge-green">Local-first</span>
+                <span class="badge badge-purple">Notion Sync</span>
+                <span class="badge badge-orange">Central Storage</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- System Architecture -->
+        <section class="section">
+            <h2>系統架構 (System Architecture)</h2>
+            <div class="mermaid">
+                graph TB
+                subgraph User["👤 User"]
+                CMD["/kof-cap, /kof-note, ..."]
+                end
+
+                subgraph Antigravity["🚀 Antigravity (Orchestrator)"]
+                SKILL["keeponfirst-local-brain-skill"]
+                PREVIEW["Preview & Confirm"]
+                end
+
+                subgraph GlobalSkill["~/.gemini/antigravity/skills/"]
+                CONFIG["config.json"]
+                SCRIPTS["scripts/"]
+                VENV[".venv"]
+                ENV[".env (Notion Token)"]
+                end
+
+                subgraph CentralBrain["📁 Central Brain (Repo)"]
+                MARKER[".agentic/CENTRAL_LOG_MARKER"]
+                RECORDS["records/"]
+                LOGS[".agentic/logs/"]
+                end
+
+                subgraph Notion["☁️ Notion"]
+                PAGES["Pages"]
+                end
+
+                CMD --> SKILL
+                SKILL --> PREVIEW
+                PREVIEW -->|User Confirms| SCRIPTS
+                SCRIPTS --> CONFIG
+                CONFIG -->|Resolve Path| MARKER
+                SCRIPTS -->|Write| RECORDS
+                SCRIPTS -->|Write| LOGS
+                SCRIPTS -->|Sync| PAGES
+
+                style User fill:#1a1a2e,stroke:#58a6ff
+                style Antigravity fill:#1a1a2e,stroke:#a371f7
+                style GlobalSkill fill:#1a1a2e,stroke:#3fb950
+                style CentralBrain fill:#1a1a2e,stroke:#d29922
+                style Notion fill:#1a1a2e,stroke:#58a6ff
+            </div>
+        </section>
+
+        <!-- Capture Workflow -->
+        <section class="section">
+            <h2>捕捉流程 (Capture Workflow)</h2>
+            <div class="mermaid">
+                flowchart LR
+                A["1️⃣ Trigger<br />/kof-cap 想法..."] --> B["2️⃣ Interpret<br />AI 判斷類型"]
+                B --> C["3️⃣ Draft<br />套用模板"]
+                C --> D["4️⃣ Preview<br />用戶確認"]
+                D -->|✅ Confirm| E["5️⃣ Execute<br />寫入記錄"]
+                D -->|✏️ Edit| C
+                D -->|❌ Cancel| F["取消"]
+                E --> G["6️⃣ Report<br />顯示結果"]
+
+                style A fill:#2d333b,stroke:#58a6ff
+                style B fill:#2d333b,stroke:#a371f7
+                style C fill:#2d333b,stroke:#a371f7
+                style D fill:#2d333b,stroke:#d29922
+                style E fill:#2d333b,stroke:#3fb950
+                style F fill:#2d333b,stroke:#f85149
+                style G fill:#2d333b,stroke:#3fb950
+            </div>
+        </section>
+
+        <!-- Path Resolution -->
+        <section class="section">
+            <h2>路徑解析優先序 (Path Resolution Priority)</h2>
+            <div class="mermaid">
+                flowchart TD
+                START["resolve_log_home()"] --> ENV{"1️⃣ ENV Variable<br />ANTIGRAVITY_LOG_HOME?"}
+                ENV -->|Set| DONE["✅ Use ENV Path"]
+                ENV -->|Not Set| CFG{"2️⃣ config.json<br />resolved.central_log_home?"}
+                CFG -->|Set| DONE2["✅ Use Config Path"]
+                CFG -->|Not Set| DETECT{"3️⃣ Auto-detect<br />CENTRAL_LOG_MARKER?"}
+                DETECT -->|Found| DONE3["✅ Use Detected Path"]
+                DETECT -->|Not Found| TTY{"4️⃣ Is TTY?"}
+                TTY -->|Yes| ASK["📝 Ask User Once<br />& Save to config.json"]
+                ASK --> DONE4["✅ Use User Path"]
+                TTY -->|No| FAIL["❌ Fail with Instructions"]
+
+                style START fill:#2d333b,stroke:#58a6ff
+                style DONE fill:#238636,stroke:#3fb950
+                style DONE2 fill:#238636,stroke:#3fb950
+                style DONE3 fill:#238636,stroke:#3fb950
+                style DONE4 fill:#238636,stroke:#3fb950
+                style FAIL fill:#da3633,stroke:#f85149
+                style ASK fill:#2d333b,stroke:#d29922
+            </div>
+        </section>
+
+        <!-- Record Types -->
+        <section class="section">
+            <h2>記錄類型 (Record Types)</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>⚖️ Decision</h3>
+                    <p>記錄重要決策、權衡取捨與理由。適用於技術選型、架構決定等。</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📝 Worklog</h3>
+                    <p>記錄每日活動、學習心得與下一步行動。適用於工作日誌。</p>
+                </div>
+                <div class="feature-card">
+                    <h3>💡 Idea</h3>
+                    <p>捕捉靈感、可能性與潛力。適用於未成形的想法。</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📋 Backlog</h3>
+                    <p>記錄未來任務、優先級與依賴關係。適用於待辦事項。</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📄 Note</h3>
+                    <p>原始捕捉，不套用結構模板。適用於快速記錄。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Features -->
+        <section class="section">
+            <h2>核心特色 (Key Features)</h2>
+            <div class="highlight-box">
+                <h3>🏠 Local-first Philosophy</h3>
+                <p>所有資料優先存在本地，Notion 只是同步目標。即使 Notion 離線，你的筆記仍然安全。</p>
+            </div>
+            <div class="highlight-box" style="margin-top: 1rem;">
+                <h3>🎯 Central Storage</h3>
+                <p>無論你在哪個專案目錄觸發 <code>/kof-cap</code>，筆記都會統一存回 Central Brain，避免散落各處。</p>
+            </div>
+            <div class="highlight-box" style="margin-top: 1rem;">
+                <h3>👁️ Preview & Confirm</h3>
+                <p>每次寫入前都會顯示預覽，確保你完全掌控。AI 輔助但不主導。</p>
+            </div>
+        </section>
+
+        <!-- Quick Start -->
+        <section class="section">
+            <h2>快速開始 (Quick Start)</h2>
+            <div class="mermaid">
+                flowchart LR
+                A["Clone Repo"] --> B["Run init.sh"]
+                B --> C["Configure .env"]
+                C --> D["Install Global Skill"]
+                D --> E["Use /kof-cap anywhere!"]
+
+                style A fill:#2d333b,stroke:#58a6ff
+                style B fill:#2d333b,stroke:#58a6ff
+                style C fill:#2d333b,stroke:#a371f7
+                style D fill:#2d333b,stroke:#3fb950
+                style E fill:#238636,stroke:#3fb950
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>Built with 💜 by <a href="https://github.com/keeponfirst" target="_blank">KeepOnFirst</a></p>
+        <p style="margin-top: 0.5rem;">
+            <a href="https://github.com/keeponfirst/keeponfirst-local-brain" target="_blank">GitHub Repository</a>
+        </p>
+    </footer>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#2d333b',
+                primaryTextColor: '#f0f6fc',
+                primaryBorderColor: '#58a6ff',
+                lineColor: '#8b949e',
+                secondaryColor: '#21262d',
+                tertiaryColor: '#161b22'
+            }
+        });
+    </script>
+</body>
+
+</html>
