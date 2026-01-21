@@ -30,6 +30,22 @@ This way, if Notion changes or I want to switch backends, my data is still mine.
 
 ---
 
+## 🚀 New Features (v1.1)
+
+### 1. Bi-Directional Brain (Read & Search)
+Powered by **Notion MCP**, your agent can now read your past records to provide context-aware assistance.
+
+- `/search <query>` - Search across your entire brain
+- `/recall <timeframe>` - Summarize past activities (e.g., "Recall last week")
+- `/trace <topic>` - Visualize the timeline of an idea (Idea → Decision → Worklog)
+- **Context-Aware Capture** - Automatically suggests related past records when you're writing.
+
+### 2. Rich Content Rendering
+- **Code Blocks**: Syntax highlighting for 20+ languages
+- **Link Previews**: Standalone URLs become visual bookmarks
+
+---
+
 ## Quick Start
 
 ### 1. Clone & Setup
@@ -59,6 +75,16 @@ NOTION_TOKEN=secret_xxxxx
 NOTION_PARENT=your-page-id-here
 NOTION_MODE=page
 ```
+
+NOTION_MODE=page
+```
+
+### 3. Configure Notion MCP (Optional but Recommended)
+To enable read/search capabilities:
+
+1. Follow the [Notion MCP Setup Guide](docs/NOTION_MCP_SETUP.md)
+2. Restart your agent environment
+3. Try `/search Hello` to verify
 
 ### Centralized Storage & Logs
 

@@ -18,6 +18,18 @@ A local-first brain capture system with AI assistance.
 | `/kof-worklog` | Force worklog record |
 | `/kof-note` | Raw capture (fallback) |
 
+### MCP-Powered Features (Read/Search)
+
+> [!NOTE]
+> These features require Notion MCP Server to be configured. See [docs/NOTION_MCP_SETUP.md](file:///Users/pershing/Documents/henry/Fun/WorkSpace/keeponfirst-local-brain/docs/NOTION_MCP_SETUP.md).
+
+| Trigger | Action |
+|---------|--------|
+| `/search <query>` | Search all records in Notion |
+| `/recall <timeframe>` | Summarize past records by time/topic |
+| `/trace <topic>` | Track idea evolution timeline |
+| Context-aware capture | Auto-reference related records when capturing |
+
 ---
 
 ## Installation
@@ -144,6 +156,11 @@ Draft JSON format:
   "tags": ["tag1", "tag2"]
 }
 ```
+
+> [!TIP]
+> **Rich Content Support**:
+> - **Code Blocks**: \`\`\`python ... \`\`\` will be rendered as native Notion code blocks.
+> - **Link Previews**: Standalone URLs on their own line (e.g. `https://github.com/...`) will be rendered as Notion Bookmarks.
 
 ### Step 6: Report
 

@@ -30,6 +30,22 @@
 
 ---
 
+## 🚀 新功能 (v1.1)
+
+### 1. 雙向大腦 (讀取與搜尋)
+透過 **Notion MCP** 整合，Agent 現在可以讀取您過去的記錄，提供具備上下文的協助。
+
+- `/search <query>` - 搜尋整個大腦中的記錄
+- `/recall <timeframe>` - 回顧並總結過去的活動 (例如: "Recall last week")
+- `/trace <topic>` - 視覺化主題的演變時間軸 (Idea → Decision → Worklog)
+- **Context-Aware Capture** - 寫入新記錄時，自動建議相關的舊記錄連結。
+
+### 2. 豐富內容渲染 (Rich Content)
+- **程式碼區塊 (Code Blocks)**：支援 20+ 種語言的語法高亮
+- **連結預覽 (Link Previews)**：獨立網址會自動轉為視覺化書籤
+
+---
+
 ## 快速開始
 
 ### 1. Clone & 設定
@@ -59,6 +75,16 @@ NOTION_TOKEN=secret_xxxxx
 NOTION_PARENT=your-page-id-here
 NOTION_MODE=page
 ```
+
+NOTION_MODE=page
+```
+
+### 3. 設定 Notion MCP (推薦選項)
+若要啟用讀取/搜尋功能：
+
+1. 請參考 [Notion MCP 設定指南](../docs/NOTION_MCP_SETUP.md)
+2. 重新啟動您的 Agent 環境
+3. 嘗試輸入 `/search Hello` 來驗證
 
 ### 中央存儲與日誌 (Centralized Storage & Logs)
 
