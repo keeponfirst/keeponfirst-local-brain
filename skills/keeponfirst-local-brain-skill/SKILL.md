@@ -99,6 +99,10 @@ User provides natural language input with trigger.
 ### Step 3: Draft
 Generate structured content with appropriate template.
 
+#### Record Generation Rules
+1. **Language**: Always check `PRIMARY_LANGUAGE` in the environment. If set to `zh-TW`, generate all titles and bodies in Traditional Chinese. Default to the user's input language if not specified.
+2. **Preview & Confirm**: Always show a preview of the structured record before writing.
+
 ### Step 4: Preview & Confirm ⚠️ CRITICAL
 
 **ALWAYS show preview before writing:**

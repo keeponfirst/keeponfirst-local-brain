@@ -42,6 +42,7 @@ class Config:
     notion_parent: Optional[str]  # Can be None for auto-init mode
     notion_mode: Literal["database", "page"]
     auto_init: bool  # Whether to auto-create root page
+    primary_language: str # Preferred language for records (e.g., zh-TW, en)
     
     # Derived paths
     records_dir: Path
@@ -53,6 +54,7 @@ class Config:
         token = os.getenv("NOTION_TOKEN")
         parent = os.getenv("NOTION_PARENT", "").strip()
         mode = os.getenv("NOTION_MODE", "page").lower()
+        lang = os.getenv("PRIMARY_LANGUAGE", "en")
         
         if not token:
             raise ValueError("NOTION_TOKEN is required. Set it in .env file.")
@@ -79,6 +81,7 @@ class Config:
             notion_parent=parent if parent else None,
             notion_mode=mode,
             auto_init=auto_init,
+            primary_language=lang,
             records_dir=brain_root / "records",
             assets_dir=brain_root / "assets",
         )
