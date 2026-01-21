@@ -1,6 +1,6 @@
 ---
 name: keeponfirst-local-brain-skill
-description: Local-first brain capture system. Triggers: /kof-cap, /kof-decision, /kof-idea, /kof-backlog, /kof-worklog, /kof-note
+description: "Local-first brain capture system. Triggers: /kof-cap, /kof-decision, /kof-idea, /kof-backlog, /kof-worklog, /kof-note"
 ---
 
 # Keeponfirst Local Brain Skill
