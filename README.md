@@ -46,6 +46,39 @@ Powered by **Notion MCP**, your agent can now read your past records to provide 
 
 ---
 
+## MCP Integrations
+
+This project supports MCP (Model Context Protocol) servers for extended capabilities.
+
+| MCP Server | Status | Purpose |
+|------------|--------|---------|
+| **Notion MCP** | ✅ Ready | Read/search past records from Notion |
+| **NotebookLM MCP** | ✅ Ready | Use Google NotebookLM as research workspace |
+
+### Notion MCP (Ready)
+Enables bi-directional interaction with your Notion brain. See [Notion MCP Setup](docs/NOTION_MCP_SETUP.md).
+
+### NotebookLM MCP (Ready)
+Use Google NotebookLM as a research scratchpad with AI-powered Q&A.
+
+- **Documentation**: [docs/kof-notebooklm-mcp/](docs/kof-notebooklm-mcp/)
+  - [PLAN.md](docs/kof-notebooklm-mcp/PLAN.md) - Implementation plan
+  - [TOOLS.md](docs/kof-notebooklm-mcp/TOOLS.md) - Tool specifications
+  - [DECISIONS.md](docs/kof-notebooklm-mcp/DECISIONS.md) - Architecture decisions
+- **Package**: [packages/kof-notebooklm-mcp/](packages/kof-notebooklm-mcp/)
+  - [README.md](packages/kof-notebooklm-mcp/README.md) - 安裝與使用指南
+  - [TESTING.md](packages/kof-notebooklm-mcp/TESTING.md) - 測試計畫
+
+**Available tools:**
+- `health_check` - Verify connection and authentication
+- `list_notebooks` - List all notebooks
+- `get_notebook` - Get notebook details
+- `list_sources` - List sources in a notebook
+- `add_source` - Add URL or text sources
+- `ask` - Query notebook with AI and get cited answers
+
+---
+
 ## Quick Start
 
 ### 1. Clone & Setup
@@ -168,6 +201,11 @@ cp -r skills/keeponfirst-local-brain-skill ~/.gemini/antigravity/skills/
 │   ├── notion_api.py
 │   ├── write_record.py
 │   └── init_brain.py
+├── packages/
+│   └── kof-notebooklm-mcp/       # NotebookLM MCP server (planned)
+├── docs/
+│   ├── NOTION_MCP_SETUP.md
+│   └── kof-notebooklm-mcp/       # NotebookLM MCP documentation
 ├── records/
 │   ├── decisions/
 │   ├── worklogs/

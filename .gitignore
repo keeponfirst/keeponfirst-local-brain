@@ -28,3 +28,6 @@ records/**/*
 # Central Logs
 .agentic/logs/*
 !.agentic/logs/.gitkeep
+
+# NotebookLM MCP browser profile (sensitive - contains session cookies)
+.kof-notebooklm/
