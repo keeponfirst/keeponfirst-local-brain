@@ -66,16 +66,16 @@ SELECTORS = {
     ],
     # 新增來源按鈕
     "add_source_button": [
+        'button.add-source-button',  # 當前 UI
         '[data-testid="add-source"]',
         'button[aria-label*="Add source"]',
         'button[aria-label*="新增來源"]',
         'button[aria-label*="Add"]',
         '[class*="add"][class*="source"]',
-        'button:has-text("Add source")',
-        'button:has-text("新增")',
     ],
     # 新增來源對話框
     "add_source_dialog": [
+        'mat-dialog-container',  # Angular Material Dialog
         '[data-testid="add-source-dialog"]',
         '[role="dialog"]',
         '[class*="dialog"]',
@@ -83,49 +83,44 @@ SELECTORS = {
     ],
     # URL 輸入選項
     "url_option": [
+        'button:has(mat-icon:has-text("link"))',  # 當前 UI (網址)
         '[data-testid="url-option"]',
         'button:has-text("Website")',
         'button:has-text("Link")',
-        'button:has-text("URL")',
         'button:has-text("網站")',
         'button:has-text("連結")',
-        '[aria-label*="website"]',
-        '[aria-label*="link"]',
     ],
     # 文字輸入選項
     "text_option": [
+        'button:has(mat-icon:has-text("content_paste"))',  # 當前 UI (複製的文字)
         '[data-testid="text-option"]',
         'button:has-text("Copied text")',
         'button:has-text("Paste text")',
-        'button:has-text("Text")',
         'button:has-text("貼上文字")',
-        'button:has-text("文字")',
-        '[aria-label*="text"]',
-        '[aria-label*="paste"]',
     ],
     # URL 輸入欄位
     "url_input": [
+        'textarea[placeholder*="網址"]',  # 當前 UI
+        'textarea[placeholder*="連結"]',
         '[data-testid="url-input"]',
         'input[type="url"]',
-        'input[placeholder*="URL"]',
         'input[placeholder*="http"]',
-        'input[placeholder*="網址"]',
         'input[name*="url"]',
     ],
     # 文字輸入欄位
     "text_input": [
+        'textarea[placeholder*="貼上的文字"]',  # 當前 UI (中文)
+        'textarea[placeholder*="Paste text"]',  # 當前 UI (英文)
         '[data-testid="text-input"]',
         'textarea[placeholder*="Paste"]',
         'textarea[placeholder*="貼上"]',
-        'textarea[placeholder*="text"]',
         'textarea:not([placeholder*="Ask"])',
     ],
-    # 標題輸入欄位
+    # 標題輸入欄位 (通常是重新命名時才出現)
     "title_input": [
         '[data-testid="title-input"]',
         'input[placeholder*="Title"]',
         'input[placeholder*="標題"]',
-        'input[placeholder*="name"]',
         'input[name*="title"]',
     ],
     # 提交/插入按鈕
@@ -136,8 +131,6 @@ SELECTORS = {
         'button:has-text("Add")',
         'button:has-text("插入")',
         'button:has-text("新增")',
-        'button:has-text("Submit")',
-        'button:has-text("確定")',
     ],
     # 處理中指示器
     "processing_indicator": [
@@ -159,57 +152,60 @@ SELECTORS = {
         '[class*="error"]',
         '[role="alert"][class*="error"]',
     ],
-    # ===== 聊天/查詢相關選擇器 =====
+    # ===== 聊天/查詢相關選擇器 (2026-01 更新) =====
     # 聊天面板
     "chat_panel": [
+        '.chat-panel-content',
         '[data-testid="chat-panel"]',
         '[aria-label*="Chat"]',
-        '[aria-label*="對話"]',
         '[class*="chat"]',
-        '[class*="conversation"]',
     ],
     # 聊天輸入框（更精確）
     "chat_textarea": [
+        'textarea.query-box-input',  # 當前 UI
         '[data-testid="chat-input"]',
         'textarea[placeholder*="Ask"]',
-        'textarea[placeholder*="ask"]',
         'textarea[placeholder*="問"]',
-        'textarea[placeholder*="Type"]',
-        'textarea[aria-label*="Ask"]',
-        '[class*="chat"] textarea',
-        '[class*="input"] textarea',
     ],
     # 發送按鈕
     "send_button": [
+        'button.actions-enter-button',  # 當前 UI
         '[data-testid="send-button"]',
         'button[aria-label*="Send"]',
         'button[aria-label*="發送"]',
         'button[aria-label*="Submit"]',
-        'button[type="submit"]',
-        '[class*="send"] button',
-        'button:has(svg[class*="send"])',
-        'button:has(svg[class*="arrow"])',
+        'button:has(mat-icon:has-text("arrow_forward"))',
     ],
-    # AI 回應容器
-    "response_container": [
-        '[data-testid="ai-response"]',
-        '[data-testid="response"]',
-        '[class*="response"]',
-        '[class*="answer"]',
+    # AI 訊息
+    "ai_message": [
+        'chat-message:not(:has(.from-user-container))',  # 當前 UI (非使用者訊息即 AI 訊息)
+        '[data-testid="ai-message"]',
         '[class*="message"][class*="assistant"]',
-        '[class*="ai"][class*="message"]',
+        '[class*="message"][class*="ai"]',
+    ],
+    # 建議問題
+    "suggested_questions": [
+        'chip-list button',  # 當前 UI (通常是 chip 按鈕)
+        '[data-testid="suggested-questions"]',
+        '[class*="suggested"]',
+        '[class*="follow-up"]',
+    ],
+    # AI 回應容器 (備用)
+    "response_container": [
+        '.chat-message-pair',  # 當前 UI
+        '[data-testid="ai-response"]',
+        '[class*="response"]',
     ],
     # 回應文字內容
     "response_text": [
+        '.message-text-content',  # 當前 UI
         '[data-testid="response-text"]',
         '[class*="response"] [class*="text"]',
-        '[class*="response"] [class*="content"]',
         '[class*="markdown"]',
-        '[class*="prose"]',
     ],
     # 回應中的引用/來源參考
     "citation": [
-        '[data-testid="citation"]',
+        '.citation-marker',  # 當前 UI
         '[class*="citation"]',
         '[class*="reference"]',
         '[class*="source-ref"]',
