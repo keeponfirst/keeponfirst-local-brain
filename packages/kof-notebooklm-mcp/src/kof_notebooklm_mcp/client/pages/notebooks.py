@@ -17,44 +17,43 @@ from ...config import Config
 logger = logging.getLogger(__name__)
 
 
-# NotebookLM UI 選擇器 (可能需要根據實際 UI 調整)
-# 使用多個備選選擇器以提高穩定性
+# NotebookLM UI 選擇器 (2026-01 更新)
+# NotebookLM 使用 Angular Material 組件，ID 藏在標題 span 的 id 屬性中
+# 格式: project-{notebook-id}-title
 SELECTORS = {
-    # 筆記本卡片的可能選擇器
+    # 筆記本卡片的可能選擇器（優先順序從高到低）
     "notebook_cards": [
+        'mat-card.project-button-card',  # 當前 NotebookLM 使用的主要選擇器
         '[data-testid="notebook-card"]',
-        '[role="listitem"]',
         '.notebook-card',
         'a[href*="/notebook/"]',
-        '[class*="notebook"][class*="card"]',
     ],
-    # 筆記本標題
+    # 筆記本標題 - ID 可從此元素的 id 屬性提取
+    # 格式: id="project-{notebook-id}-title"
     "notebook_title": [
+        'span.project-button-title',  # 當前 NotebookLM 使用
         '[data-testid="notebook-title"]',
-        'h2',
-        'h3',
         '[class*="title"]',
-        '[class*="name"]',
     ],
     # 來源數量
     "source_count": [
+        'span.project-button-subtitle-part-sources',  # 當前 NotebookLM 使用
         '[data-testid="source-count"]',
         '[class*="source"]',
-        '[class*="count"]',
     ],
     # 更新時間
     "updated_at": [
+        'span.project-button-subtitle-part',  # 當前 NotebookLM 使用
         '[data-testid="updated-at"]',
         'time',
-        '[class*="time"]',
         '[class*="date"]',
     ],
     # 建立新筆記本按鈕
     "create_button": [
+        'button[aria-label*="建立新的筆記本"]',  # 繁體中文 UI
+        'button[aria-label*="Create new notebook"]',  # 英文 UI
+        '.add-source-button',
         '[data-testid="create-notebook"]',
-        'button[aria-label*="Create"]',
-        'button[aria-label*="新增"]',
-        '[class*="create"]',
     ],
 }
 
@@ -126,20 +125,37 @@ class NotebooksPage(BasePage):
 
     async def _extract_notebook_id(self, card: Locator) -> str | None:
         """從筆記本卡片元素中提取 ID。"""
-        # 嘗試從 href 屬性取得
+        # 1. 嘗試從標題 span 的 id 屬性取得 (當前 NotebookLM 使用的格式)
+        # 格式: id="project-{notebook-id}-title"
+        try:
+            title_span = card.locator('span.project-button-title').first
+            span_id = await self.safe_get_attribute(title_span, "id")
+            if span_id:
+                match = re.search(r"project-([a-f0-9-]+)-title", span_id)
+                if match:
+                    logger.debug(f"從標題 span 提取到 ID: {match.group(1)}")
+                    return match.group(1)
+        except Exception as e:
+            logger.debug(f"從標題 span 提取 ID 失敗: {e}")
+
+        # 2. 嘗試從 href 屬性取得
         href = await self.safe_get_attribute(card, "href")
         if href:
             match = re.search(r"/notebook/([^/?]+)", href)
             if match:
                 return match.group(1)
 
-        # 嘗試從 data 屬性取得
+        # 3. 嘗試從 data 屬性取得
         for attr in ["data-notebook-id", "data-id", "id"]:
             value = await self.safe_get_attribute(card, attr)
             if value:
+                # 如果是 project-xxx-title 格式，提取中間的 ID
+                match = re.search(r"project-([a-f0-9-]+)", value)
+                if match:
+                    return match.group(1)
                 return value
 
-        # 嘗試從子元素的連結取得
+        # 4. 嘗試從子元素的連結取得
         try:
             link = card.locator('a[href*="/notebook/"]').first
             href = await self.safe_get_attribute(link, "href")
