@@ -33,7 +33,7 @@ KOF-LocalBrain 是一款專為開發者打造的 **「本地優先（Local-first
 
 ---
 
-## 🚀 新功能 (v1.1)
+## 🚀 新功能 (v1.2)
 
 ### 1. 雙向大腦 (讀取與搜尋)
 透過 **Notion MCP** 整合，Agent 現在可以讀取您過去的記錄，提供具備上下文的協助。
@@ -46,6 +46,39 @@ KOF-LocalBrain 是一款專為開發者打造的 **「本地優先（Local-first
 ### 2. 豐富內容渲染 (Rich Content)
 - **程式碼區塊 (Code Blocks)**：支援 20+ 種語言的語法高亮
 - **連結預覽 (Link Previews)**：獨立網址會自動轉為視覺化書籤
+
+### 3. NotebookLM 整合 (NotebookLM Integration)
+- **程式化控制**：透過 MCP 工具直接建立筆記本、新增來源與查詢內容。
+- **自動化研究**：將研究問題自動轉化為結構化的本地決策紀錄。
+
+---
+
+## MCP 整合 (Integrations)
+
+本專案支援 **MCP (Model Context Protocol)** 伺服器，能大幅擴展 Agent 的能力。
+
+| MCP Server | 狀態 | 用途 |
+|------------|--------|---------|
+| **Notion MCP** | ✅ Ready | 讀取/搜尋 Notion 中的歷史紀錄 |
+| **NotebookLM MCP** | ✅ Ready | 使用 Google NotebookLM 作為研究工作區 |
+
+### Notion MCP (已就緒)
+啟用與 Notion 大腦的雙向互動。請參閱 [Notion MCP 設定指南](../docs/NOTION_MCP_SETUP.md)。
+
+### NotebookLM MCP (已就緒)
+將 Google NotebookLM 作為研究草稿區，支援 AI 問答與引用。
+
+- **文檔**: [docs/kof-notebooklm-mcp/](../docs/kof-notebooklm-mcp/)
+- **套件**: [packages/kof-notebooklm-mcp/](../packages/kof-notebooklm-mcp/)
+
+**可用工具 (Tools):**
+- `health_check` - 驗證連線與登入狀態
+- `list_notebooks` - 列出所有筆記本
+- `get_notebook` - 取得筆記本詳細資訊
+- `list_sources` - 列出筆記本內的來源
+- `add_source` - 新增網址或文字來源
+- `create_notebook` - 程式化建立新筆記本
+- `ask` - 詢問 AI 並獲得附帶引用的答案
 
 ---
 

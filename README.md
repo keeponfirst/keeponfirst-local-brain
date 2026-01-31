@@ -33,7 +33,7 @@ With **NotebookLM MCP**, KOF-LocalBrain expands from "thought capture" to deep "
 
 ---
 
-## 🚀 New Features (v1.1)
+## 🚀 New Features (v1.2)
 
 ### 1. Bi-Directional Brain (Read & Search)
 Powered by **Notion MCP**, your agent can now read your past records to provide context-aware assistance.
@@ -46,6 +46,10 @@ Powered by **Notion MCP**, your agent can now read your past records to provide 
 ### 2. Rich Content Rendering
 - **Code Blocks**: Syntax highlighting for 20+ languages
 - **Link Previews**: Standalone URLs become visual bookmarks
+
+### 3. NotebookLM Integration
+- **Programmatic Control**: Create notebooks, add sources, and query content via MCP tools.
+- **Auto-Research**: Turn research questions into structured local decisions.
 
 ---
 
@@ -78,6 +82,7 @@ Use Google NotebookLM as a research scratchpad with AI-powered Q&A.
 - `get_notebook` - Get notebook details
 - `list_sources` - List sources in a notebook
 - `add_source` - Add URL or text sources
+- `create_notebook` - Create new notebooks programmatically
 - `ask` - Query notebook with AI and get cited answers
 
 ---
