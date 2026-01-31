@@ -277,3 +277,59 @@ class NotebooksPage(BasePage):
     async def get_notebook_url(self, notebook_id: str) -> str:
         """取得筆記本的 URL。"""
         return f"{self.base_url}/notebook/{notebook_id}"
+
+    async def create_notebook(self) -> str | None:
+        """
+        建立新筆記本。
+
+        Returns:
+            新筆記本 ID，若失敗則回傳 None
+        """
+        logger.info("正在建立新筆記本...")
+
+        # 確保在首頁
+        current_url = await self.get_current_url()
+        if "notebooklm.google.com" not in current_url or "/notebook/" in current_url:
+            await self.navigate_to_home()
+
+        # 等待頁面載入
+        await self.page.wait_for_timeout(2000)
+
+        # 尋找並點擊建立按鈕
+        create_btn = None
+        for selector in SELECTORS["create_button"]:
+            try:
+                btn = self.page.locator(selector).first
+                if await btn.is_visible():
+                    create_btn = btn
+                    logger.debug(f"找到建立按鈕: {selector}")
+                    break
+            except Exception:
+                continue
+
+        if not create_btn:
+            logger.error("找不到建立新筆記本按鈕")
+            return None
+
+        # 點擊並等待導航
+        try:
+            async with self.page.expect_navigation(timeout=10000):
+                await create_btn.click()
+            
+            # 等待新頁面載入
+            await self.page.wait_for_timeout(3000)
+
+            # 從 URL 提取 ID
+            new_url = await self.get_current_url()
+            match = re.search(r"/notebook/([^/?]+)", new_url)
+            if match:
+                notebook_id = match.group(1)
+                logger.info(f"成功建立筆記本: {notebook_id}")
+                return notebook_id
+            
+            logger.error(f"無法從 URL 提取新筆記本 ID: {new_url}")
+            return None
+
+        except Exception as e:
+            logger.error(f"建立筆記本失敗: {e}")
+            return None

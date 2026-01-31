@@ -1430,3 +1430,70 @@ class NotebookDetailPage(BasePage):
         logger.info(f"成功取得回應 ({len(answer)} 字元，{len(result.get('citations', []))} 個引用)")
 
         return result
+
+    async def rename_notebook(self, new_title: str) -> bool:
+        """
+        重新命名筆記本。
+
+        Args:
+            new_title: 新標題
+
+        Returns:
+            是否成功
+        """
+        logger.info(f"正在將筆記本重新命名為: {new_title}")
+
+        # 1. 嘗試直接找輸入框（有些 UI 可能直接顯示）
+        input_elem = None
+        for selector in SELECTORS["title_input"]:
+            try:
+                elem = self.page.locator(selector).first
+                if await elem.is_visible(timeout=1000):
+                    input_elem = elem
+                    break
+            except Exception:
+                continue
+
+        # 2. 如果沒找到輸入框，嘗試點擊標題
+        if not input_elem:
+            logger.debug("找不到標題輸入框，嘗試點擊標題以啟用編輯...")
+            title_elem = None
+            for selector in SELECTORS["notebook_title"]:
+                try:
+                    elem = self.page.locator(selector).first
+                    if await elem.is_visible(timeout=1000):
+                        title_elem = elem
+                        break
+                except Exception:
+                    continue
+
+            if title_elem:
+                try:
+                    await title_elem.click()
+                    await self.page.wait_for_timeout(500)
+                    
+                    # 再次尋找輸入框
+                    for selector in SELECTORS["title_input"]:
+                        try:
+                            elem = self.page.locator(selector).first
+                            if await elem.is_visible(timeout=2000):
+                                input_elem = elem
+                                break
+                        except Exception:
+                            continue
+                except Exception:
+                    pass
+
+        if input_elem:
+            try:
+                await input_elem.fill(new_title)
+                await input_elem.press("Enter")
+                await self.page.wait_for_timeout(1000) # 等待存檔
+                logger.info("重新命名成功")
+                return True
+            except Exception as e:
+                logger.error(f"重新命名失敗: {e}")
+                return False
+        
+        logger.warning("無法執行重新命名（找不到輸入框或標題）")
+        return False

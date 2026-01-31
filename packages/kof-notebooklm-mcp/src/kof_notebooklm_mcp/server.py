@@ -23,6 +23,7 @@ from .tools.get_notebook import get_notebook
 from .tools.list_sources import list_sources
 from .tools.add_source import add_source
 from .tools.ask import ask
+from .tools.create_notebook import create_notebook
 from .utils.rate_limit import get_rate_limiter, RateLimitExceeded
 from .utils.circuit_breaker import get_circuit_breaker, CircuitBreakerOpen
 from .utils.errors import handle_exception, error_response, ErrorCode
@@ -151,6 +152,20 @@ TOOL_DEFINITIONS = [
             "required": ["notebook_id", "question"],
         },
     ),
+    Tool(
+        name="create_notebook",
+        description="Create a new notebook and optionally rename it.",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "description": "The title of the new notebook (optional)",
+                }
+            },
+            "required": [],
+        },
+    ),
 ]
 
 
@@ -193,7 +208,7 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
         if name != "health_check":
             try:
                 # 寫入操作使用獨立的速率限制
-                operation = name if name in ("add_source", "ask") else "default"
+                operation = name if name in ("add_source", "ask", "create_notebook") else "default"
                 await rate_limiter.acquire(operation, blocking=True, timeout=30.0)
             except RateLimitExceeded as e:
                 logger.warning(f"速率限制超過: {e}")
@@ -250,6 +265,11 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
                 question=question,
                 include_citations=include_citations,
             )
+            result_dict = result.to_dict()
+
+        elif name == "create_notebook":
+            title = arguments.get("title")
+            result = await create_notebook(title=title)
             result_dict = result.to_dict()
 
         else:
