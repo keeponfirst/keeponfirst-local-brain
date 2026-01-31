@@ -6,18 +6,21 @@
 
 [![中文文檔](https://img.shields.io/badge/文檔-繁體中文-blue)](./docs/README_zh-TW.md)
 
-## Why This Project?
+## Project Introduction: KOF-LocalBrain
 
-After trying Notion AI for 2 days, I discovered it only offers **20 free uses total** — not a daily or monthly quota, just 20 uses and you're done.
+KOF-LocalBrain is a **Local-first** brain capture system designed for developers, solving the problem of context loss during development. Unlike cloud-dependent note-taking tools, it keeps data ownership completely local, ensuring maximum privacy and security.
 
-That's when it hit me: I'm already using AI-IDE (like Antigravity/Cursor) every single day. Why not build a **local brain** that:
+**Core Value:**
+1. **IDE-First Workflow**: Capture fleeting thoughts without leaving your coding environment.
+2. **AI-Assisted Structuring**: Uses existing IDE AI to transform raw notes into standardized records (decisions, worklogs, backlogs) with explicit human confirmation.
 
-1. **Captures thoughts at the moment they happen** — right in the IDE where I'm already working
-2. **Uses AI to structure and organize** — leveraging the AI I'm already paying for
-3. **Syncs to Notion via API** — getting the best of both worlds
-4. **Stays local-first** — not locked into any single service
+### NotebookLM MCP: Research-to-Action
 
-This way, if Notion changes or I want to switch backends, my data is still mine.
+With **NotebookLM MCP**, KOF-LocalBrain expands from "thought capture" to deep "knowledge integration":
+
+* **Dedicated Research Workspace**: Use NotebookLM to digest external knowledge without cluttering your local context.
+* **Seamless Context Retrieval**: Talk to your external knowledge base directly from your IDE via MCP.
+* **Structured Action**: Transform insights from NotebookLM into local structured records (e.g., generate a Decision record from research docs), closing the loop between research and development.
 
 ---
 

@@ -6,18 +6,21 @@
 
 [![English](https://img.shields.io/badge/Docs-English-blue)](../README.md)
 
-## 為什麼做這個專案？
+## 專案簡介：KOF-LocalBrain
 
-試用了 Notion AI 兩天後，我發現它只提供 **20 次免費使用** — 不是每日或每月額度，就是總共 20 次用完就沒了。
+KOF-LocalBrain 是一款專為開發者打造的 **「本地優先（Local-first）」** 大腦捕捉系統，旨在解決開發過程中因切換工具而導致的脈絡遺失問題。與傳統依賴雲端的筆記軟體不同，KOF-LocalBrain 堅持將資料的所有權完全保留在用戶的本地機器上，確保極致的隱私與安全。
 
-這時我想到：我每天都在用 AI-IDE（像是 Antigravity/Cursor），為什麼不做一個 **Local Brain**：
+**核心價值：**
+1. **IDE 優先的工作流**：開發者無需離開編程環境，即可隨時捕捉稍縱即逝的想法或決策。
+2. **AI 輔助結構化**：系統利用現有的 IDE AI 智能，協助將原始筆記轉化為標準化的紀錄（如 Decision 決策、Worklog 日誌），並在寫入前經過用戶的明確批准（Human-in-the-loop）。
 
-1. **在想法發生的當下擷取** — 就在我已經在用的 IDE 裡
-2. **用 AI 來結構化和整理** — 利用我已經在付費的 AI
-3. **透過 API 同步到 Notion** — 兩邊的好處都拿到
-4. **保持 Local-first** — 不被任何單一服務綁死
+### NotebookLM MCP 整合效益：從研究到行動的閉環
 
-這樣一來，如果 Notion 有變動或我想換後端，我的資料還是我的。
+透過引入 **NotebookLM MCP**，KOF-LocalBrain 將功能邊界從單純的「想法捕捉」擴展至深度的「知識整合」：
+
+* **專屬的研究工作區**：利用 NotebookLM 強大的文檔理解能力，作為外部知識的消化中心。
+* **無縫的知識調用**：藉由 Model Context Protocol (MCP)，開發者可在 IDE 內直接與這些外部知識進行對話。
+* **結構化落地**：系統能將從 NotebookLM 獲取的洞察，直接轉化為 KOF-LocalBrain 的本地結構化格式（例如：根據研究文件生成一份 Decision 記錄），實現了真正的知識管理閉環。
 
 ---
 
