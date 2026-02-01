@@ -68,13 +68,9 @@ Enables bi-directional interaction with your Notion brain. See [Notion MCP Setup
 ### NotebookLM MCP (Ready)
 Use Google NotebookLM as a research scratchpad with AI-powered Q&A.
 
-- **Documentation**: [docs/kof-notebooklm-mcp/](docs/kof-notebooklm-mcp/)
-  - [PLAN.md](docs/kof-notebooklm-mcp/PLAN.md) - Implementation plan
-  - [TOOLS.md](docs/kof-notebooklm-mcp/TOOLS.md) - Tool specifications
-  - [DECISIONS.md](docs/kof-notebooklm-mcp/DECISIONS.md) - Architecture decisions
-- **Package**: [packages/kof-notebooklm-mcp/](packages/kof-notebooklm-mcp/)
-  - [README.md](packages/kof-notebooklm-mcp/README.md) - 安裝與使用指南
-  - [TESTING.md](packages/kof-notebooklm-mcp/TESTING.md) - 測試計畫
+- **Standalone Repo**: [keeponfirst/kof-notebooklm-mcp](https://github.com/keeponfirst/kof-notebooklm-mcp)
+- **PyPI**: [kof-notebooklm-mcp](https://pypi.org/project/kof-notebooklm-mcp/)
+  - [README.md](https://github.com/keeponfirst/kof-notebooklm-mcp/blob/main/README.md) - 安裝與使用指南
 
 **Available tools:**
 - `health_check` - Verify connection and authentication

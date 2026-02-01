@@ -68,8 +68,8 @@ KOF-LocalBrain 是一款專為開發者打造的 **「本地優先（Local-first
 ### NotebookLM MCP (已就緒)
 將 Google NotebookLM 作為研究草稿區，支援 AI 問答與引用。
 
-- **文檔**: [docs/kof-notebooklm-mcp/](../docs/kof-notebooklm-mcp/)
-- **套件**: [packages/kof-notebooklm-mcp/](../packages/kof-notebooklm-mcp/)
+- **獨立 Repo**: [keeponfirst/kof-notebooklm-mcp](https://github.com/keeponfirst/kof-notebooklm-mcp) (含完整文檔)
+- **PyPI**: [kof-notebooklm-mcp](https://pypi.org/project/kof-notebooklm-mcp/)
 
 **可用工具 (Tools):**
 - `health_check` - 驗證連線與登入狀態
