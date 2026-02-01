@@ -1,0 +1,3 @@
+[submodule "packages/kof-notebooklm-mcp"]
+	path = packages/kof-notebooklm-mcp
+	url = https://github.com/keeponfirst/kof-notebooklm-mcp.git
