@@ -24,9 +24,9 @@ This enhances existing capture workflows:
    - Tags mentioned
    - Topic indicators
 
-2. **Search for Related Records** - Use MCP
+2. **Search for Related Records** - Use MCP (`notion_post_search`)
    - Search for records with similar keywords
-   - Filter by same record type (optional)
+   - Filter by same record type (`object=page`)
    - Limit to recent records (last 30 days by default)
 
 3. **Present Context** - If relevant records found

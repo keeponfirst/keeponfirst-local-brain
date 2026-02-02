@@ -29,6 +29,7 @@ A local-first brain capture system with AI assistance.
 | `/recall <timeframe>` | Summarize past records by time/topic |
 | `/trace <topic>` | Track idea evolution timeline |
 | Context-aware capture | Auto-reference related records when capturing |
+| `Publish [file] to Notion` | Create Notion page from local file (Official MCP) |
 
 ---
 

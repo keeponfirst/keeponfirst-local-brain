@@ -1,30 +1,34 @@
-# Notion MCP Setup Guide
+# Notion MCP Setup Guide (Official)
 
-The **Notion MCP (Model Context Protocol)** server allows your Agent (Antigravity/Gemini) to not just *write* to Notion, but also **read, search, and understand** your existing Brain.
+The **Notion MCP (Model Context Protocol)** server allows your Agent (Antigravity/Gemini) to fully interact with your Notion workspace: **read search, write pages, and manage databases**.
+
+We use the **Official Notion MCP Server** (`@notionhq/notion-mcp-server`) for maximum compatibility and feature support.
 
 ## Why Setup MCP?
 
-- **Context Awareness**: The Agent can read your previous Worklogs to help write new ones.
-- **Search**: Ask "What was that idea I had about graph databases?" and the Agent can find it.
+- **Direct Integation**: Create pages and append content directly without custom scripts.
+- **Deep Context**: The Agent can read your previous Worklogs to help write new ones.
 - **Bi-directional**: Turns your Local Brain into a true interactive partner.
 
 ## Setup Instructions
 
 ### 1. Requirements
 
-You need `uv` installed, or another way to run the python package.
+- `npm` (Node.js) installed.
+- A Notion Integration Token (from [Notion Developers](https://www.notion.so/my-integrations)).
 
-### 2. Configure Claude Desktop (or your MCP Client)
+### 2. Configure MCP Client
 
-Add the following to your MCP configuration file (typically `~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
+Add the following to your MCP configuration file:
 
 ```json
 {
   "mcpServers": {
     "notion": {
-      "command": "uvx",
+      "command": "npx",
       "args": [
-        "mcp-server-notion"
+        "-y",
+        "@notionhq/notion-mcp-server"
       ],
       "env": {
         "NOTION_API_TOKEN": "secret_YOUR_NOTION_TOKEN_HERE"
@@ -39,19 +43,23 @@ Add the following to your MCP configuration file (typically `~/Library/Applicati
 
 ### 3. Verify
 
-Restart your MCP Client (e.g., Claude Desktop). You should see the `notion` server tool available.
+Restart your MCP Client. You should see tools starting with `notion_` (or `notion-mcp-server_API` depending on client implementation).
 
 ### 4. Capabilities
 
-Once connected, the Agent gains these tools:
-- `notion_read_page`: Read content of a page.
-- `notion_search`: Search pages in your workspace.
-- `notion_append_block`: Add content to pages (complementing our local script).
+The official server maps the Notion API directly to tools:
 
-## Integration with Local Brain
+| Tool Name | Capability |
+| :--- | :--- |
+| `notion_post_search` | Search pages or databases |
+| `notion_post_page` | Create new pages (supports any parent) |
+| `notion_patch_block_children` | Append content to existing blocks |
+| `notion_get_block_children` | Read page content |
+| `notion_query_data_source` | Query database with filters |
 
-When this MCP server is active, you can ask questions like:
-> "Summarize my worklogs from last week"
-> "Find the decision record about the database migration"
+## Workflow Integration
 
-The Agent will use the MCP tools to query your Notion Brain directly.
+When this MCP server is active, you can ask the Agent to:
+1. "Find the page titled 'Project X' and list its sub-pages"
+2. "Create a new page 'Meeting Notes' under 'Project X' with this summary..."
+3. "Search for 'Database Schema' and tell me the last update time"

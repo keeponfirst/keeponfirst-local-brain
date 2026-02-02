@@ -35,13 +35,14 @@ With **NotebookLM MCP**, KOF-LocalBrain expands from "thought capture" to deep "
 
 ## 🚀 New Features (v1.2)
 
-### 1. Bi-Directional Brain (Read & Search)
-Powered by **Notion MCP**, your agent can now read your past records to provide context-aware assistance.
+### 1. Hybrid Brain Architecture (Read, Search, Write)
+Powered by **Official Notion MCP**, your agent creates a seamless loop between local files and Notion knowledge base.
 
-- `/search <query>` - Search across your entire brain
-- `/recall <timeframe>` - Summarize past activities (e.g., "Recall last week")
-- `/trace <topic>` - Visualize the timeline of an idea (Idea → Decision → Worklog)
-- **Context-Aware Capture** - Automatically suggests related past records when you're writing.
+- **/search <query>** - Search across your entire brain
+- **/recall <timeframe>** - Summarize past activities (e.g., "Recall last week")
+- **/trace <topic>** - Visualize the timeline of an idea (Idea → Decision → Worklog)
+- **Context-Aware Capture** - Automatically suggests related past records.
+- **Publishing** - One-command publishing of local markdowns to Notion pages.
 
 ### 2. Rich Content Rendering
 - **Code Blocks**: Syntax highlighting for 20+ languages
@@ -62,8 +63,13 @@ This project supports MCP (Model Context Protocol) servers for extended capabili
 | **Notion MCP** | ✅ Ready | Read/search past records from Notion |
 | **NotebookLM MCP** | ✅ Ready | Use Google NotebookLM as research workspace |
 
-### Notion MCP (Ready)
-Enables bi-directional interaction with your Notion brain. See [Notion MCP Setup](docs/NOTION_MCP_SETUP.md).
+### Notion MCP (Official)
+Enables full interaction with your Notion brain. See [Notion MCP Setup](docs/NOTION_MCP_SETUP.md).
+
+**Capabilities:**
+- `post_page`: Create rich pages with blocks
+- `post_search`: Global search
+- `append_block`: Add content to existing pages
 
 ### NotebookLM MCP (Ready)
 Use Google NotebookLM as a research scratchpad with AI-powered Q&A.
@@ -175,8 +181,26 @@ cp -r skills/keeponfirst-local-brain-skill ~/.gemini/antigravity/skills/
 ```
 /kof-cap Decided to use Supabase because pricing is more transparent
 /kof-idea New feature: voice input for capture
-/kof-worklog Completed API integration
 ```
+
+---
+
+## 🔄 Agentic Workflows
+
+We provide pre-defined workflows for the Agent (`.agent/workflows/`):
+
+### 1. Local Capture (Standard)
+Triggered by `/kof-*` commands. Captures thoughts into structured local files.
+
+### 2. Research-to-Action (NotebookLM)
+1. Use NotebookLM MCP to query documents.
+2. Agent summarizes findings into a local **Decision** record.
+
+### 3. Publish Knowledge (New)
+*Trigger: "Publish [file] to Notion"*
+1. Agent reads local Markdown file.
+2. Formats it into Notion Blocks.
+3. Uses `notion_post_page` to publish it to your "KeepOnFirst Brain".
 
 ---
 

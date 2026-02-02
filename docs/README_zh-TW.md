@@ -35,13 +35,14 @@ KOF-LocalBrain 是一款專為開發者打造的 **「本地優先（Local-first
 
 ## 🚀 新功能 (v1.2)
 
-### 1. 雙向大腦 (讀取與搜尋)
-透過 **Notion MCP** 整合，Agent 現在可以讀取您過去的記錄，提供具備上下文的協助。
-
-- `/search <query>` - 搜尋整個大腦中的記錄
-- `/recall <timeframe>` - 回顧並總結過去的活動 (例如: "Recall last week")
-- `/trace <topic>` - 視覺化主題的演變時間軸 (Idea → Decision → Worklog)
-- **Context-Aware Capture** - 寫入新記錄時，自動建議相關的舊記錄連結。
+### 1. 混合大腦架構 (Hybrid Brain Architecture)
+由 **Official Notion MCP** 驅動，實現本地檔案與 Notion 知識庫的無縫循環。
+ 
+- **/search <query>** - 搜尋整個大腦
+- **/recall <timeframe>** - 回顧活動 (例如: "Recall last week")
+- **/trace <topic>** - 視覺化主題演變
+- **Context-Aware Capture** - 自動建議相關的舊記錄連結。
+- **Publishing** - 一鍵將本地 Markdown 發布為 Notion 頁面。
 
 ### 2. 豐富內容渲染 (Rich Content)
 - **程式碼區塊 (Code Blocks)**：支援 20+ 種語言的語法高亮
@@ -62,8 +63,13 @@ KOF-LocalBrain 是一款專為開發者打造的 **「本地優先（Local-first
 | **Notion MCP** | ✅ Ready | 讀取/搜尋 Notion 中的歷史紀錄 |
 | **NotebookLM MCP** | ✅ Ready | 使用 Google NotebookLM 作為研究工作區 |
 
-### Notion MCP (已就緒)
-啟用與 Notion 大腦的雙向互動。請參閱 [Notion MCP 設定指南](../docs/NOTION_MCP_SETUP.md)。
+### Notion MCP (官方版)
+啟用與 Notion 大腦的完全互動。請參閱 [Notion MCP 設定指南](../docs/NOTION_MCP_SETUP.md)。
+ 
+**核心能力:**
+- `post_page`: 建立包含豐富區塊的頁面
+- `post_search`: 全域搜尋
+- `append_block`: 新增內容到現有頁面
 
 ### NotebookLM MCP (已就緒)
 將 Google NotebookLM 作為研究草稿區，支援 AI 問答與引用。
@@ -174,8 +180,26 @@ cp -r skills/keeponfirst-local-brain-skill ~/.gemini/antigravity/skills/
 ```
 /kof-cap 今天決定用 Supabase 因為 pricing 更透明
 /kof-idea 想到一個新的 feature：語音輸入擷取
-/kof-worklog 完成了 API 整合
 ```
+ 
+---
+ 
+## 🔄 Agentic Workflows (自動化流程)
+ 
+我們提供了預定義的 Agent 工作流 (`.agent/workflows/`)：
+ 
+### 1. 本地擷取 (Local Capture)
+透過 `/kof-*` 指令觸發。將想法捕捉為結構化的本地檔案。
+ 
+### 2. 研究轉行動 (Research-to-Action)
+1. 使用 NotebookLM MCP 查詢文件。
+2. Agent 將發現總結為本地 **Decision** 決策紀錄。
+ 
+### 3. 知識發布 (Publish Knowledge) [New]
+*觸發語: "Publish [file] to Notion"*
+1. Agent 讀取本地 Markdown 檔案。
+2. 將其轉化為 Notion Blocks 格式。
+3. 使用 `notion_post_page` 直接發布到您的 "KeepOnFirst Brain"。
 
 ---
 
