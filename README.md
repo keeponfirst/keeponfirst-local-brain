@@ -196,7 +196,12 @@ Triggered by `/kof-*` commands. Captures thoughts into structured local files.
 1. Use NotebookLM MCP to query documents.
 2. Agent summarizes findings into a local **Decision** record.
 
-### 3. Publish Knowledge (New)
+### 3. Morning Briefing (New)
+*Trigger: "/brief"*
+1. Search Notion for recent Worklogs and Backlog items.
+2. Genereate a "Morning Briefing" summary (Yesterday's progress + Today's focus).
+
+### 4. Publish Knowledge
 *Trigger: "Publish [file] to Notion"*
 1. Agent reads local Markdown file.
 2. Formats it into Notion Blocks.

@@ -195,7 +195,12 @@ cp -r skills/keeponfirst-local-brain-skill ~/.gemini/antigravity/skills/
 1. 使用 NotebookLM MCP 查詢文件。
 2. Agent 將發現總結為本地 **Decision** 決策紀錄。
  
-### 3. 知識發布 (Publish Knowledge) [New]
+### 3. 晨間回顧 (Morning Briefing) [New]
+*觸發語: "/brief"*
+1. 搜尋 Notion 中最近的 Worklog 與 Backlog 項目。
+2. 生成「晨間簡報」總結 (昨日進度 + 今日焦點)。
+ 
+### 4. 知識發布 (Publish Knowledge)
 *觸發語: "Publish [file] to Notion"*
 1. Agent 讀取本地 Markdown 檔案。
 2. 將其轉化為 Notion Blocks 格式。
