@@ -27,6 +27,7 @@ A local-first brain capture system with AI assistance.
 |---------|--------|
 | `/search <query>` | Search all records in Notion |
 | `/recall <timeframe>` | Summarize past records by time/topic |
+| `/brief` | Morning briefing (Yesterday's Log + Today's Focus) |
 | `/trace <topic>` | Track idea evolution timeline |
 | Context-aware capture | Auto-reference related records when capturing |
 | `Publish [file] to Notion` | Create Notion page from local file (Official MCP) |
@@ -97,6 +98,12 @@ User provides natural language input with trigger.
 - `/kof-decision|idea|backlog|worklog` → Force specific type
 - `/kof-note` → Raw capture without structure
 
+### Step 2.5: Context Search (Optional)
+If Notion MCP is available, search for related context *before* drafting.
+1. Extract keywords from user input.
+2. Use `notion_post_search` to find related records.
+3. If matches found, display them as "💡 Related Context" in the Preview step.
+
 ### Step 3: Draft
 Generate structured content with appropriate template.
 
@@ -117,6 +124,7 @@ Generate structured content with appropriate template.
 BODY
 ---
 
+💡 Context: [Link to related Page A] | [Link to related Page B]
 Tags: TAGS
 Date: DATE
 
