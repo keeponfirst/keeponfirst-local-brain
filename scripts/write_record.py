@@ -34,6 +34,8 @@ class LocalRecord:
     final_body: str
     tags: Optional[list[str]] = None
     date: Optional[str] = None
+    notion_sync_status: str = "SUCCESS"  # SUCCESS | PENDING | FAILED
+    notion_error: Optional[str] = None
 
 
 def slugify(text: str, max_length: int = 50) -> str:
@@ -162,13 +164,22 @@ def write_record(
         tags=tags
     )
     
-    # Write to Notion (unless dry run)
+    # Write to Notion (unless dry run) - with fallback on failure
     notion_result: Optional[NotionPage] = None
-    if not dry_run:
-        client = NotionClient()
-        notion_result = client.create_record(notion_data)
+    notion_error: Optional[str] = None
+    notion_sync_status = "SUCCESS"
     
-    # Create local record
+    if not dry_run:
+        try:
+            client = NotionClient()
+            notion_result = client.create_record(notion_data)
+        except Exception as e:
+            # Notion failed - record error but continue with local write
+            notion_error = str(e)
+            notion_sync_status = "PENDING"
+            print(f"⚠️  Notion sync failed (will write locally): {e}", file=sys.stderr)
+    
+    # Create local record (always, even if Notion failed)
     local_record = LocalRecord(
         type=record_type,
         title=title,
@@ -178,7 +189,9 @@ def write_record(
         source_text=source_text,
         final_body=body,
         tags=tags,
-        date=date
+        date=date,
+        notion_sync_status=notion_sync_status,
+        notion_error=notion_error
     )
     
     # Save locally (always, even on dry run for testing)
@@ -188,8 +201,11 @@ def write_record(
         md_path = json_path = Path("/dry-run/would-save-here")
     
     return {
-        "success": True,
+        "success": True,  # Local write succeeded
         "dry_run": dry_run,
+        "notion_synced": notion_result is not None,
+        "notion_pending": notion_error is not None,
+        "notion_error": notion_error,
         "notion_page_id": local_record.notion_page_id,
         "notion_url": local_record.notion_url,
         "local_md": str(md_path),

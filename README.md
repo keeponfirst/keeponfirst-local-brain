@@ -33,9 +33,17 @@ With **NotebookLM MCP**, KOF-LocalBrain expands from "thought capture" to deep "
 
 ---
 
-## 🚀 New Features (v1.2)
+## 🚀 New Features (v1.3)
 
-### 1. Hybrid Brain Architecture (Read, Search, Write)
+### 1. Resilient Local-First Write (NEW)
+- **Notion Fallback**: When Notion API fails (DNS, auth, network), records are still saved locally with `notion_sync_status: PENDING`.
+- **Zero Data Loss**: Local capture never fails due to remote service issues.
+
+### 2. Health Check Command (NEW)
+- **`/kof-health`**: One-command diagnostic for all dependencies (Notion API, local storage, MCP config).
+- **Actionable Hints**: Clear error messages with resolution steps.
+
+### 3. Hybrid Brain Architecture (Read, Search, Write)
 Powered by **Official Notion MCP**, your agent creates a seamless loop between local files and Notion knowledge base.
 
 - **/search <query>** - Search across your entire brain
@@ -44,11 +52,11 @@ Powered by **Official Notion MCP**, your agent creates a seamless loop between l
 - **Context-Aware Capture** - Automatically suggests related past records.
 - **Publishing** - One-command publishing of local markdowns to Notion pages.
 
-### 2. Rich Content Rendering
+### 4. Rich Content Rendering
 - **Code Blocks**: Syntax highlighting for 20+ languages
 - **Link Previews**: Standalone URLs become visual bookmarks
 
-### 3. NotebookLM Integration
+### 5. NotebookLM Integration
 - **Programmatic Control**: Create notebooks, add sources, and query content via MCP tools.
 - **Auto-Research**: Turn research questions into structured local decisions.
 
@@ -143,9 +151,13 @@ This allows you to use `/kof-cap` in any project directory, and notes will be co
 
 ---
 
-## Record Typesrify Setup
+## Verify Setup
 
 ```bash
+# Quick health check
+python scripts/health_check.py
+
+# Or dry-run a record
 source .venv/bin/activate
 python scripts/write_record.py --dry-run --input tests/example_idea.json
 ```
@@ -176,6 +188,7 @@ cp -r skills/keeponfirst-local-brain-skill ~/.gemini/antigravity/skills/
 | `/kof-backlog` | Force backlog record |
 | `/kof-worklog` | Force worklog record |
 | `/kof-note` | Raw capture (fallback) |
+| `/kof-health` | Run health check diagnostics |
 
 **Example:**
 ```
@@ -233,12 +246,13 @@ Triggered by `/kof-*` commands. Captures thoughts into structured local files.
 │   ├── config.py
 │   ├── notion_api.py
 │   ├── write_record.py
+│   ├── health_check.py        # NEW: Diagnostic tool
 │   └── init_brain.py
 ├── packages/
-│   └── kof-notebooklm-mcp/       # NotebookLM MCP server (planned)
+│   └── kof-notebooklm-mcp/
 ├── docs/
 │   ├── NOTION_MCP_SETUP.md
-│   └── kof-notebooklm-mcp/       # NotebookLM MCP documentation
+│   └── kof-notebooklm-mcp/
 ├── records/
 │   ├── decisions/
 │   ├── worklogs/
@@ -247,6 +261,26 @@ Triggered by `/kof-*` commands. Captures thoughts into structured local files.
 ├── .env.example
 └── README.md
 ```
+
+---
+
+## Troubleshooting
+
+### Notion Write Failures
+
+| Symptom | Cause | Solution |
+|---------|-------|----------|
+| DNS resolution failed | Network issue | `ping api.notion.com` |
+| 401 Unauthorized | Invalid token | Regenerate at [notion.so/my-integrations](https://notion.so/my-integrations) |
+| 404 Not Found | No permission | Share page with Integration via "..." → "Connections" |
+
+> **Note**: When Notion fails, records are saved locally with `notion_sync_status: PENDING`.
+
+### MCP Configuration
+
+> ⚠️ MCP config changes require **IDE restart** to take effect.
+
+Run `/kof-health` to diagnose MCP setup issues.
 
 ---
 

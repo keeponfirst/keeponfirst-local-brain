@@ -33,9 +33,17 @@ KOF-LocalBrain 是一款專為開發者打造的 **「本地優先（Local-first
 
 ---
 
-## 🚀 新功能 (v1.2)
+## 🚀 新功能 (v1.3)
 
-### 1. 混合大腦架構 (Hybrid Brain Architecture)
+### 1. 彈性本地優先寫入 (NEW)
+- **Notion Fallback**：當 Notion API 失敗（DNS、認證、網路）時，記錄仍會儲存到本地，標記為 `notion_sync_status: PENDING`。
+- **零資料遺失**：本地擷取不會因遠端服務問題而失敗。
+
+### 2. 健康檢查指令 (NEW)
+- **`/kof-health`**：一鍵診斷所有相依性（Notion API、本地儲存、MCP 設定）。
+- **可操作提示**：清晰的錯誤訊息與解決步驟。
+
+### 3. 混合大腦架構 (Hybrid Brain Architecture)
 由 **Official Notion MCP** 驅動，實現本地檔案與 Notion 知識庫的無縫循環。
  
 - **/search <query>** - 搜尋整個大腦
@@ -44,11 +52,11 @@ KOF-LocalBrain 是一款專為開發者打造的 **「本地優先（Local-first
 - **Context-Aware Capture** - 自動建議相關的舊記錄連結。
 - **Publishing** - 一鍵將本地 Markdown 發布為 Notion 頁面。
 
-### 2. 豐富內容渲染 (Rich Content)
+### 4. 豐富內容渲染 (Rich Content)
 - **程式碼區塊 (Code Blocks)**：支援 20+ 種語言的語法高亮
 - **連結預覽 (Link Previews)**：獨立網址會自動轉為視覺化書籤
 
-### 3. NotebookLM 整合 (NotebookLM Integration)
+### 5. NotebookLM 整合 (NotebookLM Integration)
 - **程式化控制**：透過 MCP 工具直接建立筆記本、新增來源與查詢內容。
 - **自動化研究**：將研究問題自動轉化為結構化的本地決策紀錄。
 
@@ -142,9 +150,13 @@ NOTION_MODE=page
 
 ---
 
-### 3. 驗證設定
+### 4. 驗證設定
 
 ```bash
+# 快速健康檢查
+python scripts/health_check.py
+
+# 或執行 dry-run 測試
 source .venv/bin/activate
 python scripts/write_record.py --dry-run --input tests/example_idea.json
 ```
@@ -175,6 +187,7 @@ cp -r skills/keeponfirst-local-brain-skill ~/.gemini/antigravity/skills/
 | `/kof-backlog` | 強制待辦記錄 |
 | `/kof-worklog` | 強制工作日誌 |
 | `/kof-note` | 原始擷取 |
+| `/kof-health` | 執行健康檢查 |
 
 **範例：**
 ```
@@ -232,6 +245,7 @@ cp -r skills/keeponfirst-local-brain-skill ~/.gemini/antigravity/skills/
 │   ├── config.py
 │   ├── notion_api.py
 │   ├── write_record.py
+│   ├── health_check.py        # NEW: 診斷工具
 │   └── init_brain.py
 ├── records/
 │   ├── decisions/
@@ -241,6 +255,26 @@ cp -r skills/keeponfirst-local-brain-skill ~/.gemini/antigravity/skills/
 ├── .env.example
 └── README.md
 ```
+
+---
+
+## 疑難排解 (Troubleshooting)
+
+### Notion 寫入失敗
+
+| 症狀 | 原因 | 解決方式 |
+|-----|------|----------|
+| DNS 解析失敗 | 網路問題 | `ping api.notion.com` |
+| 401 Unauthorized | Token 無效 | 到 [notion.so/my-integrations](https://notion.so/my-integrations) 重新生成 |
+| 404 Not Found | 無權限 | 在 Notion 頁面「...」→「Connections」加入 Integration |
+
+> **注意**：當 Notion 失敗時，記錄會儲存到本地並標記 `notion_sync_status: PENDING`。
+
+### MCP 設定問題
+
+> ⚠️ MCP 設定變更後需**重啟 IDE**才會生效。
+
+執行 `/kof-health` 來診斷 MCP 設定問題。
 
 ---
 
