@@ -137,6 +137,16 @@ To enable read/search capabilities:
 2. Restart your agent environment
 3. Try `/search Hello` to verify
 
+### 4. Configure NotebookLM MCP (Research)
+To enable NotebookLM research tools, add to your `mcp_config.json`:
+
+```json
+"kof-notebooklm-mcp": {
+  "command": "uvx",
+  "args": ["kof-notebooklm-mcp"]
+}
+```
+
 ### Centralized Storage & Logs
 
 This system uses a **Central Home** for all your records and logs, regardless of where you capture them from.

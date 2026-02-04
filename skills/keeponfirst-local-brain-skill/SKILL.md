@@ -17,11 +17,18 @@ A local-first brain capture system with AI assistance.
 | `/kof-backlog` | Force backlog record |
 | `/kof-worklog` | Force worklog record |
 | `/kof-note` | Raw capture (fallback) |
+| `/kof-health` | Run health check diagnostics |
 
 ### MCP-Powered Features (Read/Search)
 
-> [!NOTE]
 > These features require Notion MCP Server to be configured. See [docs/NOTION_MCP_SETUP.md](file:///Users/pershing/Documents/henry/Fun/WorkSpace/keeponfirst-local-brain/docs/NOTION_MCP_SETUP.md).
+> For NotebookLM features, add this to your MCP config:
+> ```json
+> "kof-notebooklm-mcp": {
+>   "command": "uvx",
+>   "args": ["kof-notebooklm-mcp"]
+> }
+> ```
 
 | Trigger | Action |
 |---------|--------|
@@ -31,6 +38,7 @@ A local-first brain capture system with AI assistance.
 | `/trace <topic>` | Track idea evolution timeline |
 | Context-aware capture | Auto-reference related records when capturing |
 | `Publish [file] to Notion` | Create Notion page from local file (Official MCP) |
+| `/research` | Research topic using NotebookLM |
 
 ---
 
@@ -189,6 +197,52 @@ Title: {TITLE}
 
 ---
 
+---
+
+## NotebookLM Research Workflow
+
+Integrates NotebookLM into the PLAN → ASSETS → CODE workflow.
+
+### 1. Research Scratchpad (PLAN Phase)
+
+**Workflow**: Deep Research for Technical Decision
+1. Create notebook for research topic
+2. Add sources (Docs, Blog posts, GitHub repos)
+3. Ask synthesizing questions (Tradeoffs, Summaries)
+4. Capture decision in KOF (`/kof-decision` with citations)
+
+**Prompt Pattern**:
+```
+Use kof-notebooklm-mcp to research [TOPIC]:
+1. checks - verify connection/notebooks
+2. add_source - add URLs
+3. ask - "What are the main approaches to...?"
+4. Return findings formatted for /kof-decision
+```
+
+### 2. Citations Provider (ASSETS Phase)
+
+**Workflow**: Generate Documentation with Citations
+1. Query existing research notebook
+2. Ask specific questions
+3. Format as markdown with citation links
+
+**Prompt Pattern**:
+```
+Query notebook "[NOTEBOOK_NAME]" for documentation:
+1. ask - "[QUESTION] - cite your sources"
+2. Format response with [source_title](source_url) links
+```
+
+### 3. Technical Reference (CODE Phase)
+
+**Workflow**: Implementation Guidance
+1. Add technical docs to notebook
+2. Ask implementation questions ("Show example code", "Edge cases")
+3. Incorporate guidance into code
+
+---
+
 ## Templates
 
 ### Decision ⚖️
@@ -270,3 +324,37 @@ Title: {TITLE}
 | `scripts/write_record.py` | Write record |
 | `scripts/notion_api.py` | Notion client |
 | `scripts/config.py` | Configuration |
+| `scripts/health_check.py` | Diagnostic check |
+| `scripts/add_research_to_notebooklm.py` | Add research note to NotebookLM |
+
+---
+
+## Troubleshooting
+
+### Notion 寫入失敗
+
+| 症狀 | 可能原因 | 解決方式 |
+|-----|---------|----------|
+| DNS 解析失敗 | 網路問題 | `ping api.notion.com` 確認連線 |
+| 401 Unauthorized | Token 無效 | 到 [notion.so/my-integrations](https://notion.so/my-integrations) 重新生成 |
+| 404 Not Found | 頁面不存在或無權限 | 在 Notion 頁面「...」→「Connections」加入 Integration |
+
+> [!TIP]
+> Notion 寫入失敗時，系統會自動寫入本地並標記 `notion_sync_status: PENDING`，不會遺失資料。
+
+### MCP 設定未生效
+
+> [!WARNING]
+> MCP 設定變更後需**重啟 IDE**才會載入新設定。
+
+- 檢查 `.mcp.json` 或 `mcp_config.json` JSON 語法
+- 確認 `notion-mcp-server` 路徑正確
+- 執行 `/kof-health` 檢查 MCP 狀態
+
+### 快速診斷
+
+```bash
+# 執行健康檢查
+SKILL_ROOT="$HOME/.gemini/antigravity/skills/keeponfirst-local-brain-skill"
+$SKILL_ROOT/.venv/bin/python $SKILL_ROOT/scripts/health_check.py
+```

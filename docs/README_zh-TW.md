@@ -136,6 +136,16 @@ NOTION_MODE=page
 2. 重新啟動您的 Agent 環境
 3. 嘗試輸入 `/search Hello` 來驗證
 
+### 4. 設定 NotebookLM MCP (研究功能)
+若要啟用 NotebookLM 研究工具，請將以下設定加入 `mcp_config.json`：
+
+```json
+"kof-notebooklm-mcp": {
+  "command": "uvx",
+  "args": ["kof-notebooklm-mcp"]
+}
+```
+
 ### 中央存儲與日誌 (Centralized Storage & Logs)
 
 本系統使用 **Central Home** 來統一管理所有筆記與執行日誌，無論你在哪裡觸發錄入。
