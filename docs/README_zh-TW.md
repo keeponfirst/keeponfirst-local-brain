@@ -6,6 +6,14 @@
 
 [![English](https://img.shields.io/badge/Docs-English-blue)](../README.md)
 
+## ☕ 支持這個專案
+
+如果這個專案對你有幫助，歡迎請我喝杯咖啡：
+
+👉 https://buymeacoffee.com/keeponfirst
+
+---
+
 ## 專案簡介：KOF-LocalBrain
 
 KOF-LocalBrain 是一款專為開發者打造的 **「本地優先（Local-first）」** 大腦捕捉系統，旨在解決開發過程中因切換工具而導致的脈絡遺失問題。與傳統依賴雲端的筆記軟體不同，KOF-LocalBrain 堅持將資料的所有權完全保留在用戶的本地機器上，確保極致的隱私與安全。

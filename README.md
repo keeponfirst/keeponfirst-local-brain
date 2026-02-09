@@ -6,6 +6,14 @@
 
 [![中文文檔](https://img.shields.io/badge/文檔-繁體中文-blue)](./docs/README_zh-TW.md)
 
+## ☕ Support this project
+
+If this project helps you, you can support development here:
+
+👉 https://buymeacoffee.com/keeponfirst
+
+---
+
 ## Project Introduction: KOF-LocalBrain
 
 KOF-LocalBrain is a **Local-first** brain capture system designed for developers, solving the problem of context loss during development. Unlike cloud-dependent note-taking tools, it keeps data ownership completely local, ensuring maximum privacy and security.
