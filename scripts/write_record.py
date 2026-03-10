@@ -21,6 +21,12 @@ from config import get_config, PROJECT_ROOT
 from notion_api import NotionClient, RecordData, NotionPage
 import log_manager
 
+# Optional: URL metadata extraction (optional import to avoid hard dep at import time)
+try:
+    from url_parser import parse_url
+except ImportError:
+    parse_url = None
+
 
 @dataclass
 class LocalRecord:
@@ -36,6 +42,35 @@ class LocalRecord:
     date: Optional[str] = None
     notion_sync_status: str = "SUCCESS"  # SUCCESS | PENDING | FAILED
     notion_error: Optional[str] = None
+    # Optional: URL / web / social source (backward compatible)
+    source_url: Optional[str] = None
+    source_platform: Optional[str] = None  # twitter, reddit, medium, etc.
+    og_title: Optional[str] = None
+    og_image: Optional[str] = None
+    og_description: Optional[str] = None
+
+
+def _is_single_url(text: str) -> bool:
+    """True if text is effectively a single URL (with optional whitespace)."""
+    if not text or not text.strip():
+        return False
+    s = text.strip()
+    return s.startswith(("http://", "https://")) and " " not in s
+
+
+def _extract_url_from_text(text: str) -> Optional[str]:
+    """Extract first URL from text if present."""
+    if not text:
+        return None
+    s = text.strip()
+    if s.startswith(("http://", "https://")):
+        end = len(s)
+        for i, c in enumerate(s):
+            if c in " \n\t":
+                end = i
+                break
+        return s[:end]
+    return None
 
 
 def slugify(text: str, max_length: int = 50) -> str:
@@ -114,6 +149,12 @@ def generate_markdown(record: LocalRecord) -> str:
     
     if record.notion_url:
         lines.append(f"**Notion:** [{record.notion_page_id[:8]}...]({record.notion_url})")
+    if getattr(record, "source_url", None):
+        lines.append(f"**Source:** [{record.source_url}]({record.source_url})")
+    if getattr(record, "source_platform", None):
+        lines.append(f"**Platform:** {record.source_platform}")
+    if getattr(record, "og_image", None):
+        lines.append(f"**OG Image:** {record.og_image}")
     
     lines.extend([
         "",
@@ -154,6 +195,28 @@ def write_record(
     source_text = input_data.get("source_text", "")
     date = input_data.get("date")
     tags = input_data.get("tags", [])
+    source_url = input_data.get("source_url")
+    source_platform = input_data.get("source_platform")
+    og_title = input_data.get("og_title")
+    og_image = input_data.get("og_image")
+    og_description = input_data.get("og_description")
+
+    # Optional: resolve URL metadata when source_url given or source_text is a single URL
+    if parse_url and (source_url or _is_single_url(source_text)):
+        url_to_parse = source_url or _extract_url_from_text(source_text)
+        if url_to_parse:
+            meta = parse_url(url_to_parse)
+            if not meta.error:
+                source_url = source_url or meta.source_url
+                source_platform = source_platform or meta.source_platform
+                og_title = og_title or meta.og_title
+                og_image = og_image or meta.og_image
+                og_description = og_description or meta.og_description
+                if (not title or title == "Untitled") and meta.og_title:
+                    title = meta.og_title
+                if not body.strip() and meta.og_description:
+                    body = meta.og_description
+            # if meta.error, keep any caller-provided fields and leave rest None
     
     # Create record data for Notion
     notion_data = RecordData(
@@ -191,7 +254,12 @@ def write_record(
         tags=tags,
         date=date,
         notion_sync_status=notion_sync_status,
-        notion_error=notion_error
+        notion_error=notion_error,
+        source_url=source_url,
+        source_platform=source_platform,
+        og_title=og_title,
+        og_image=og_image,
+        og_description=og_description,
     )
     
     # Save locally (always, even on dry run for testing)
@@ -263,8 +331,14 @@ def main():
         )
         print(json.dumps(result, ensure_ascii=False, indent=2))
     except Exception as e:
+        error_code = "UNKNOWN_ERROR"
+        if "NOTION_TOKEN" in str(e):
+            error_code = "NOTION_AUTH_FAILED"
+        elif "Invalid" in str(e):
+            error_code = "INVALID_INPUT"
         print(json.dumps({
             "success": False,
+            "error_code": error_code,
             "error": str(e)
         }, indent=2))
         sys.exit(1)

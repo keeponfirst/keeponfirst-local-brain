@@ -119,6 +119,9 @@ Generate structured content with appropriate template.
 1. **Language**: Always check `PRIMARY_LANGUAGE` in the environment. If set to `zh-TW`, generate all titles and bodies in Traditional Chinese. Default to the user's input language if not specified.
 2. **Preview & Confirm**: Always show a preview of the structured record before writing.
 
+> [!IMPORTANT]
+> Before generating any record, check if `PRIMARY_LANGUAGE` is set in the project's `.env` file. If set to `zh-TW`, all titles and body content MUST be written in Traditional Chinese.
+
 ### Step 4: Preview & Confirm ⚠️ CRITICAL
 
 **ALWAYS show preview before writing:**
@@ -144,11 +147,6 @@ Date: DATE
 
 **DO NOT WRITE WITHOUT USER CONFIRMATION.**
 
-### Step 5: Execute
-
-Only after user confirms:
-
-1. Write draft JSON to temp file `/tmp/kof_record.json`
 ### Step 5: Execute
 
 Only after user confirms:

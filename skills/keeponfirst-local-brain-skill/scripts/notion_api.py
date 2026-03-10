@@ -217,7 +217,10 @@ class NotionClient:
         return blocks
     
     def _parse_markdown_body(self, markdown: str) -> list[dict]:
-        """Parse markdown into Notion blocks."""
+        """
+        Parse markdown into Notion blocks.
+        Supports: Headers, Lists, Quotes, Code Blocks, and basic Bookmarks.
+        """
         blocks = []
         lines = markdown.strip().split("\n")
         i = 0
@@ -228,6 +231,29 @@ class NotionClient:
             # Skip empty lines
             if not line.strip():
                 i += 1
+                continue
+            
+            # Code Blocks
+            if line.strip().startswith("```"):
+                language = line.strip()[3:] or "plain text"
+                code_content = []
+                i += 1
+                while i < len(lines) and not lines[i].strip().startswith("```"):
+                    code_content.append(lines[i])
+                    i += 1
+                
+                # Consume the closing ```
+                if i < len(lines):
+                    i += 1
+                
+                blocks.append({
+                    "object": "block",
+                    "type": "code",
+                    "code": {
+                        "rich_text": [{"type": "text", "text": {"content": "\n".join(code_content)}}],
+                        "language": self._map_language(language)
+                    }
+                })
                 continue
             
             # Headers
@@ -270,6 +296,13 @@ class NotionClient:
                     "type": "quote",
                     "quote": {"rich_text": [{"type": "text", "text": {"content": line[2:]}}]}
                 })
+            # Bookmark (Standalone URL)
+            elif line.strip().startswith("http") and " " not in line.strip():
+                blocks.append({
+                    "object": "block",
+                    "type": "bookmark",
+                    "bookmark": {"url": line.strip()}
+                })
             # Regular paragraph
             else:
                 blocks.append({
@@ -281,6 +314,41 @@ class NotionClient:
             i += 1
         
         return blocks
+
+    def _map_language(self, lang: str) -> str:
+        """Map common language names to Notion API supported languages."""
+        lang = lang.lower().strip()
+        mapping = {
+            "py": "python",
+            "js": "javascript",
+            "ts": "typescript",
+            "md": "markdown",
+            "sh": "bash",
+            "shell": "bash",
+            "json": "json",
+            "html": "html",
+            "css": "css",
+            "sql": "sql",
+            "go": "go",
+            "java": "java",
+            "c": "c",
+            "cpp": "c++",
+            "c++": "c++",
+            "rs": "rust",
+            "rust": "rust",
+            "rb": "ruby",
+            "ruby": "ruby",
+            "php": "php",
+            "swift": "swift",
+            "kt": "kotlin",
+            "dart": "dart",
+            "yaml": "yaml",
+            "yml": "yaml",
+            "xml": "xml",
+            "dockerfile": "docker",
+            "docker": "docker"
+        }
+        return mapping.get(lang, "plain text")
     
     def test_connection(self) -> bool:
         """Test Notion API connection."""

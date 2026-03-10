@@ -31,3 +31,7 @@ records/**/*
 
 # NotebookLM MCP browser profile (sensitive - contains session cookies)
 .kof-notebooklm/
+
+# Temp
+*.tmp
+/tmp/
