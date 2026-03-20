@@ -11,15 +11,19 @@ Usage:
 
 import argparse
 import json
+import os
 import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
 from dataclasses import dataclass, asdict
 
+import requests as _req
+
 from config import get_config, PROJECT_ROOT
 from notion_api import NotionClient, RecordData, NotionPage
 import log_manager
+import uuid as _uuid
 
 # Optional: URL metadata extraction (optional import to avoid hard dep at import time)
 try:
@@ -48,6 +52,10 @@ class LocalRecord:
     og_title: Optional[str] = None
     og_image: Optional[str] = None
     og_description: Optional[str] = None
+    # Supabase sync
+    supabase_id: Optional[str] = None
+    supabase_sync_status: str = "PENDING"  # PENDING | SUCCESS | FAILED | SKIPPED
+    supabase_error: Optional[str] = None
 
 
 def _is_single_url(text: str) -> bool:
@@ -187,7 +195,8 @@ def write_record(
         Dictionary with result information
     """
     config = get_config()
-    
+    local_id = str(_uuid.uuid4())
+
     # Parse input
     record_type = input_data.get("type", "idea")
     title = input_data.get("title", "Untitled")
@@ -260,11 +269,14 @@ def write_record(
         og_title=og_title,
         og_image=og_image,
         og_description=og_description,
+        supabase_id=local_id,
     )
     
     # Save locally (always, even on dry run for testing)
     if not dry_run:
         md_path, json_path = save_local(local_record, config)
+        # Supabase sync (optional — skip if not configured)
+        _sync_to_supabase(local_record, local_id, config)
     else:
         md_path = json_path = Path("/dry-run/would-save-here")
     
@@ -278,6 +290,8 @@ def write_record(
         "notion_url": local_record.notion_url,
         "local_md": str(md_path),
         "local_json": str(json_path),
+        "supabase_synced": local_record.supabase_sync_status == "SUCCESS",
+        "supabase_error": local_record.supabase_error,
         "record": asdict(local_record)
     }
 
@@ -342,6 +356,55 @@ def main():
             "error": str(e)
         }, indent=2))
         sys.exit(1)
+
+
+def _sync_to_supabase(record: LocalRecord, local_id: str, config) -> None:
+    """Sync record to Supabase. Silently skips if not configured."""
+    url = os.environ.get("SUPABASE_URL", "").strip()
+    key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "").strip()
+    user_id = os.environ.get("KOF_USER_ID", "").strip()
+
+    if not url or not key or not user_id:
+        record.supabase_sync_status = "SKIPPED"
+        return
+
+    try:
+        resp = _req.post(
+            f"{url}/rest/v1/rpc/upsert_record",
+            headers={
+                "apikey": key,
+                "Authorization": f"Bearer {key}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "p_id": local_id,
+                "p_user_id": user_id,
+                "p_local_id": local_id,
+                "p_device_id": "claude_code",
+                "p_record_type": record.type,
+                "p_title": record.title,
+                "p_source_text": record.source_text or "",
+                "p_final_body": record.final_body or "",
+                "p_tags": record.tags or [],
+                "p_source_url": record.source_url,
+                "p_source_platform": record.source_platform,
+                "p_og_title": record.og_title,
+                "p_og_image": record.og_image,
+                "p_key_insight": None,
+                "p_date": record.date,
+                "p_is_deleted": False,
+                "p_updated_at": record.created_at,
+            },
+            timeout=10,
+        )
+        if resp.ok:
+            record.supabase_sync_status = "SUCCESS"
+        else:
+            record.supabase_sync_status = "FAILED"
+            record.supabase_error = f"HTTP {resp.status_code}: {resp.text[:200]}"
+    except Exception as e:
+        record.supabase_sync_status = "FAILED"
+        record.supabase_error = str(e)[:200]
 
 
 if __name__ == "__main__":
