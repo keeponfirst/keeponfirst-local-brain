@@ -216,6 +216,23 @@ cp -r skills/keeponfirst-local-brain-skill ~/.gemini/antigravity/skills/
 /kof-idea New feature: voice input for capture
 ```
 
+### Self-improvement Integration (V1)
+
+Sync OpenClaw workspace learnings (`../.learnings/*.md`) into local-brain records:
+
+```bash
+python scripts/import_self_improvement.py --dry-run
+python scripts/import_self_improvement.py
+python scripts/import_self_improvement.py --since 7
+```
+
+Mapping rules:
+- `LEARNINGS.md` → `worklogs/` (decision-like entries go to `decisions/`)
+- `ERRORS.md` → `backlogs/`
+- `FEATURE_REQUESTS.md` → `backlogs/`
+
+Dedup is handled by `.agentic/self_improvement_sync_state.json`.
+
 ---
 
 ## 🔄 Agentic Workflows
